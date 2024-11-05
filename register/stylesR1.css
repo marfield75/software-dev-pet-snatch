@@ -11,12 +11,10 @@ body {
     background-position: center; /* 图片居中 */
     background-repeat: no-repeat; 
 }
-
 h2 {
     text-align: center;
     color: #333;
 }
-
 label {
     margin-top: 10px;
     display: block;
@@ -35,7 +33,6 @@ input[type="password"] {
     border: 1px solid #ccc;
     border-radius: 4px;
 }
-
 button {
     width: 100%;
     padding: 10px;
@@ -45,7 +42,6 @@ button {
     border-radius: 4px;
     cursor: pointer;
 }
-
 button:hover {
     background-color: #218838;
 }
