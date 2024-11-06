@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Page</title>
+    <link rel="stylesheet" href="/stylesR1.css"> <!-- 链接到 CSS 文件 -->
+</head>
+<body>
+    <div class="register-container">
+        <h2>Register</h2>
+        <form id="registrationForm" method="POST" action="/register"> <!-- 设置表单 ID，并指定表单提交路径 -->
+            <label for="first-name">First Name</label>
+            <input type="text" id="first-name" name="firstName" required>
+
+            <label for="last-name">Last Name</label>
+            <input type="text" id="last-name" name="lastName" required>
+
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" required>
+
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" required>
+
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" required>
+
+            <button type="submit">Continue</button>
+        </form>
+        <p>Already have an account? <a href="{{loginPath}}">Log in here</a>.</p> <!-- 使用 Handlebars 插入动态链接 -->
+    </div>
+
+    <script>
+        // JavaScript 代码来处理表单提交
+        document.getElementById('registrationForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // 防止默认表单提交行为
+            window.location.href = '/register2'; // 修改为你的下一个注册页面路径
+        });
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{{!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login Page</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="login-container">
+    <h2>Login</h2>
+    <form id="loginForm" onsubmit="return validateForm()">
+      <label for="username">Username</label>
+      <input type="text" id="username" name="username" required>
+
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" required>
+
+      <button type="submit">Login</button>
+      <p id="errorMessage" class="error-message"></p>
+    </form>
+  </div>
+
+  <script src="script.js"></script>
+          <script>
+            
+            document.getElementById('loginForm').addEventListener('submit', function(event) {
+            event.preventDefault(); 
+
+            window.location.href = 'other_page.html'; 
+            });
+
+        </script>
+</body>
+
+</html> --}}

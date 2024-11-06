@@ -1,0 +1,96 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pet's Information</title>
+    <link rel="stylesheet" href="/stylesR2.css"> <!-- Link to CSS file -->
+</head>
+<body>
+    <div class="register-container">
+        <h2>Pet's Information</h2>
+        <form id="petInformationForm" action="/submit-pet-info" method="POST"> <!-- Update action to the server route -->
+            <label for="pet-Name">Pet's Name</label>
+            <input type="text" id="pet-Name" name="petName" required>
+
+            <label for="pet-class">Pet's Class</label>
+            <input type="text" id="pet-class" name="petClass" required>
+            
+            <label for="pet-breed">Pet's Breed</label>
+            <input type="text" id="pet-breed" name="petBreed" required>
+
+            <label for="eye-color">Eye Color</label>
+            <input type="text" id="eye-color" name="eyeColor" required>
+
+            <label for="birth">Birthday</label>
+            <input type="text" id="birth" name="birth" required>
+
+            <label for="location">Location</label>
+            <input type="text" id="location" name="location" required>
+
+            <button type="submit">Continue</button>
+        </form>
+    </div>
+
+    <script>
+        // Redirect to another page after form submission
+        document.getElementById('petInformationForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent default form submission behavior
+            window.location.href = '/other-page'; // Change to your target route path
+        });
+    </script>
+
+</body>
+</html>
+
+
+
+
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pet's information</title>
+    <link rel="stylesheet" href="stylesR2.css"> 
+</head>
+<body>
+    <div class="register-container">
+        <h2>Pet's information</h2>
+        <form id="petInformationForm" action="#" method="POST">
+            <label for="pet-Name">Pet's Name</label>
+            <input type="text" id="pet-Name" name="pet-Name" required>
+
+            <label for="pet-class">Pet's Class</label>
+            <input type="text" id="pet-class" name="pet-class" required>
+            
+            <label for="pet-breed">Pet's Breed</label>
+            <input type="text" id="pet-breed" name="pet-breed" required>
+
+            <label for="eye-color">Eye Color</label>
+            <input type="text" id="eye-color" name="eye-color" required>
+
+            <label for="birth">Birthday</label>
+            <input type="text" id="birth" name="birth" required>
+
+            <label for="location">Location</label>
+            <input type="text" id="Location" name="Location" required>
+
+            <button type="submit">continue</button>
+        </form>
+    </div>
+
+    <script>
+        
+document.getElementById('petInformationForm').addEventListener('submit', function(event) {
+    event.preventDefault(); /
+     
+    window.location.href = 'other_page.html'; // 
+});
+
+    </script>
+
+</body>
+</html> -->

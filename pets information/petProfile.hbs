@@ -1,0 +1,119 @@
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animal Information</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+
+        h2 {
+            color: #555;
+            border-bottom: 2px solid #ccc;
+            padding-bottom: 5px;
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f9f9f9;
+            color: #333;
+            font-weight: bold;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+            color: #888;
+        }
+
+        .pet-photo {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .pet-photo img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Welcome to {{pet_name}}'s Profile!</h1>
+
+        <div class="pet-photo">
+            <img src="{{pet_photo_url}}" alt="{{pet_name}}'s Photo">
+        </div>
+
+        <h2>Animal Information:</h2>
+        <table>
+            <tbody>
+                <tr>
+                    <td>Pet's Name</td>
+                    <td>{{pet_name}}</td>
+                </tr>
+                <tr>
+                    <td>Pet's Class</td>
+                    <td>{{pet_class}}</td>
+                </tr>
+                <tr>
+                    <td>Pet's Breed</td>
+                    <td>{{pet_breed}}</td>
+                </tr>
+                <tr>
+                    <td>Eye Color</td>
+                    <td>{{eye_color}}</td>
+                </tr>
+                <tr>
+                    <td>Birthday</td>
+                    <td>{{birth}}</td>
+                </tr>
+                <tr>
+                    <td>Location</td>
+                    <td>{{location}}</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="footer">
+            Thank you for visiting {{pet_name}}'s profile!
+        </div>
+    </div>
+</body>
