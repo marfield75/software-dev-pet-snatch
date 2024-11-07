@@ -1,0 +1,30 @@
+<div id="user-profile">
+    <h2 class="text-center">User Profile</h2>
+    
+    <!-- Profile Picture (Editable) -->
+    <div class="profile-image">
+        <img src="{{profilePicture}}" alt="Profile Picture" id="profile-pic">
+        <input type="file" id="profile-pic-upload" style="display: none;" onchange="previewProfilePic()">
+        <button onclick="document.getElementById('profile-pic-upload').click()">Change Profile Picture</button>
+    </div>
+    
+    <!-- Username (Editable) -->
+    <div class="profile-field">
+        <p><strong>Username:</strong></p>
+        <input type="text" id="username" value="{{username}}" readonly onclick="editField('username')">
+        <button onclick="editField('username')">Edit</button>
+    </div>
+    
+    <!-- Bio (Editable) -->
+    <div class="profile-field">
+        <p><strong>Bio:</strong></p>
+        <textarea id="bio" readonly onclick="editField('bio')">{{bio}}</textarea>
+        <button onclick="editField('bio')">Edit</button>
+    </div>
+
+    <!-- Save and Cancel buttons -->
+    <div class="profile-actions">
+        <button onclick="saveProfile()">Save Changes</button>
+        <button onclick="cancelEdit()">Cancel</button>
+    </div>
+</div>

@@ -91,10 +91,6 @@ app.get('/register2', (req, res) => {
     res.render('pages/register2');
 });
 
-app.get('/pet', (req, res) => {
-    res.render('pages/pet');
-});
-
 
 app.get('/home', (req, res) => {
     res.render('pages/home');
@@ -135,7 +131,7 @@ app.post('/login', async (req, res) => {
             } else {
                 req.session.user = user;
                 req.session.save();
-                res.redirect('/home');
+                res.redirect('/discover');
             }
         })
         .catch(err => {
@@ -143,11 +139,10 @@ app.post('/login', async (req, res) => {
             res.redirect('/register');
         });
 });
-//Authentication MiddleWare
+// Authentication Middleware.
 const auth = (req, res, next) => {
     if (!req.session.user) {
-        // Store the original URL to redirect after login
-        req.session.redirectAfterLogin = req.originalUrl;
+        // Default to login page.
         return res.redirect('/login');
     }
     next();
