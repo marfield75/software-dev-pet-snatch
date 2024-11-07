@@ -6,7 +6,7 @@
     margin: 0;
     font-family: Arial, sans-serif;
     background-color: #f4f4f4;
-    background-image: url('IMG_8893.jpg'); /* 添加图像背景 */
+    background-image: url('IMG_8893.jpg'); /* 添加图像背景*/
     background-size: cover; /* 使图片覆盖整个页面 */
     background-position: center; /* 图片居中 */
     background-repeat: no-repeat; 
