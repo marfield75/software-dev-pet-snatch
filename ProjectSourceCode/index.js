@@ -87,6 +87,11 @@ app.get('/register', (req, res) => {
     res.render('pages/register');
 });
 
+app.get('/register2', (req, res) => {
+    res.render('pages/register2');
+});
+
+
 app.get('/home', (req, res) => {
     res.render('pages/home');
 });
