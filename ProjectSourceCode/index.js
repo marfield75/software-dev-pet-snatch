@@ -90,6 +90,10 @@ app.get('/home', (req, res) => {
     res.render('pages/home');
 });
 
+app.get('/home', (req, res) => {
+    res.render('pages/profile')
+});
+
 // POST route for handling registration form submission
 app.post('/register', async (req, res) => {
     const name = await req.body.username;
