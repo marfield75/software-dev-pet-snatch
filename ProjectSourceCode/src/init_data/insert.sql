@@ -4,12 +4,12 @@ VALUES (1, 'jamie1', 'James', 'Smith', '$2a$12$QyCbeD4dC6hOCKZF3W9Mx.AZ5p.JrEyyX
 (3, 'Tom3', 'Tom', 'Blue', '$2a$12$dSmpFORwoVlBcHksxozPC.ETPdOd71Iru6IRDlkcNgCigONZStq3C', 'tb1997@gmail.com');
 
 INSERT INTO pets (id, name, class, breed, eye_color, birthday, location, bio)
-VALUES (1, 'rocky', 'dog', 'golden retriever', '2022-06-07','Boulder, Colorado', '-'),
-VALUES (2, 'tommy', 'dog', 'pitbull', '2021-07-27','Denver, Colorado', '-');
+VALUES (1, 'rocky', 'dog', 'golden retriever', 'brown', '2022-06-07','Boulder, Colorado', '-'),
+(2, 'tommy', 'dog', 'pitbull', 'brown', '2021-07-27','Denver, Colorado', '-');
 
 INSERT INTO users_to_pets(user_id, pet_id)
 VALUES (2, 1),
-VALUES (3, 2);
+(3, 2);
 
 
 -- 1, jm@1
