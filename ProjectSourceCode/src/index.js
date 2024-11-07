@@ -54,8 +54,7 @@ app.engine('hbs', hbs.engine);
 app.set('view engine', 'hbs');
 app.set('views', path.join(__dirname, 'views'));
 app.use(bodyParser.json()); // specify the usage of JSON for parsing request body.
-app.use(express.static('src/pictures'));
-app.use(express.static('src/resources/css'));
+
 // initialize session variables
 app.use(
     session({
@@ -76,7 +75,7 @@ app.use(
 // *****************************************************
 
 app.get('/', (req, res) => {
-    res.redirect('/home');
+    res.redirect('/login');
 });
 
 app.get('/login', (req, res) => {
@@ -85,15 +84,6 @@ app.get('/login', (req, res) => {
 
 app.get('/register', (req, res) => {
     res.render('pages/register');
-});
-
-app.get('/register2', (req, res) => {
-    res.render('pages/register2');
-});
-
-
-app.get('/home', (req, res) => {
-    res.render('pages/home');
 });
 
 // POST route for handling registration form submission
@@ -146,19 +136,6 @@ const auth = (req, res, next) => {
 
 // Authentication Required
 app.use(auth);
-
-app.get('/pet', async (req, res) => {
-    const query = 'SELECT * FROM pets;';
-    db.any(query)
-        .then(data => {
-            res.render('pages/pet', { pets: data });
-        })
-        .catch(err => {
-            console.log(err);
-            res.redirect('/home');
-        });
-});
-
 // *****************************************************
 // <!-- Section 5 : Start Server-->
 // *****************************************************
