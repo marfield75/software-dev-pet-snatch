@@ -91,10 +91,6 @@ app.get('/register2', (req, res) => {
     res.render('pages/register2');
 });
 
-app.get('/pet', (req, res) => {
-    res.render('pages/pet');
-});
-
 
 app.get('/home', (req, res) => {
     res.render('pages/home');
