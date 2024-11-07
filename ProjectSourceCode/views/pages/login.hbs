@@ -18,7 +18,7 @@
 <div id="loginbody">
   <div class="login-container">
     <h2>Login</h2>
-    <form id="loginForm" onsubmit="return validateForm()">
+    <form id="loginForm" onsubmit="return validateForm()" action="/login" method="POST">
       <label for="username">Username</label>
       <input type="text" id="username" name="username" required>
 
