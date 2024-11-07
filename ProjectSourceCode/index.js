@@ -96,7 +96,7 @@ app.get('/home', (req, res) => {
     res.render('pages/home');
 });
 
-app.get('/home', (req, res) => {
+app.get('/profile', (req, res) => {
     res.render('pages/profile')
 });
 
