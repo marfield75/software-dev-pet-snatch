@@ -131,7 +131,7 @@ app.post('/login', async (req, res) => {
             } else {
                 req.session.user = user;
                 req.session.save();
-                res.redirect('/discover');
+                res.redirect('/home');
             }
         })
         .catch(err => {
@@ -139,10 +139,11 @@ app.post('/login', async (req, res) => {
             res.redirect('/register');
         });
 });
-// Authentication Middleware.
+//Authentication MiddleWare
 const auth = (req, res, next) => {
     if (!req.session.user) {
-        // Default to login page.
+        // Store the original URL to redirect after login
+        req.session.redirectAfterLogin = req.originalUrl;
         return res.redirect('/login');
     }
     next();
