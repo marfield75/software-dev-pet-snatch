@@ -1,1 +1,14 @@
+Monday 10/28 TA Meeting
+i. Decisions made: Information to be stored in database, wireframe, minimum viable 
+    product features
+ii. Alternative actions/options discussed: N/A
+iii. Follow-up items, including agreed-on roles and responsibilities: Creating use
+    case diagram and database
 
+Monday 11/4 TA Meeting
+i. Decisions made: Features to implement with user story, keep nav bar simple, 
+    implement filtered search bar on its own
+ii. Alternative actions/options discussed: Docker help at office hours
+iii. Follow-up items, including agreed-on roles and responsibilities: David works on 
+    partials, Pradyumna creates tables for database, Addie profile page, Matthew
+    home page, Nora pet profile page, Rita register and login pages, API routes next
