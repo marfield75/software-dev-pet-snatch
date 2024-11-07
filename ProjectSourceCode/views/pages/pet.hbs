@@ -3,10 +3,21 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
   <style>
+    button {
+      background-color: #101010;
+      width: 300px;
+      border: none;
+      color: white;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+    }
+
     .star-button {
       display: inline-block;
-      width: 25px;
-      height: 25px;
+      width: 48px;
+      height: 48px;
       background-color: #FFD700;
       clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
       border: none;
@@ -24,10 +35,11 @@
     p {
       margin-bottom: 1px;
     }
+
   </style>
 </head>
 <h3 class="text-center">Pet Name</h2>
-<h4 class="text-center">Posted by <a href="/">username</a></h2>
+<h4 class="text-center">Posted by <a href="/profile">username</a></h2>
 
 <!-- pet images carousel-->
 <div id="pet-images" class="carousel slide pb-3 w-50 center" data-ride="carousel">
@@ -45,10 +57,10 @@
               alt="First slide">
         </div>
         <div class="carousel-item" id="carousel-item-2">
-          <img class="d-block w-100" src="" alt="Second slide">
+          <img class="d-block w-100" src="https://t4.ftcdn.net/jpg/01/99/00/79/360_F_199007925_NolyRdRrdYqUAGdVZV38P4WX8pYfBaRP.jpg" alt="Second slide">
         </div>
         <div class="carousel-item" id="carousel-item-3">
-          <img class="d-block w-100" src="" alt="Third slide">
+          <img class="d-block w-100" src="https://d150u0abw3r906.cloudfront.net/wp-content/uploads/2021/12/image8-8.png" alt="Third slide">
         </div>
         </div>
         <button id="carousel-prev" class="carousel-control-prev" type="button" data-bs-target="#pet-images"
@@ -65,18 +77,6 @@
 
       <!-- pet details -->
       <div>
-        <p>
-          <bold>Class:</bold> the class
-        </p>
-        <p>
-          <bold>Breed:</bold> the breed
-        </p>
-        <p>
-          <bold>Age:</bold> the age
-        </p>
-        <p>
-          <bold>Location:</bold> the location
-        </p>
         <div class="mt-3">
           <h5>Desciption</h5>
           <p><b>Class:</b> the class</p>
@@ -87,8 +87,8 @@
 
       </div>
       <div class="mt-3 col-md-12">
-        <button type="button">Contact Owner</button>
-        <button type="button">Add to Cart</button>
+        <button type="contact-button">Contact Owner</button>
+        <button type="cart-button">Add to Cart</button>
         <button class="star-button"></button>
       </div>
 
