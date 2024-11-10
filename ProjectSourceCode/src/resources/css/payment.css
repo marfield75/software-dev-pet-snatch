@@ -1,0 +1,178 @@
+
+#paybody {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    background-image: url('IMG_8893.jpg'); /* 添加图像背景*/
+    background-size: cover; /* 使图片覆盖整个页面 */
+    background-position: center; /* 图片居中 */
+    background-repeat: no-repeat; 
+}
+.top-left-image {
+    position: absolute;
+    top: 3px; /* Adjust for distance from the top */
+    left: 20px; /* Adjust for distance from the right */
+    width: 80px; /* Set the width of the image */
+    height: auto; /* Maintains aspect ratio */
+    z-index: 1000; /* Ensures it appears above other elements */
+}
+.payment-container {
+    
+    padding: 2.5em;
+    width: 100%;
+    max-width: 800px;
+    display: flex;
+    gap: 2em;
+   
+}
+
+
+/* Left and Right Sections */
+.left-section, .right-section {
+    flex: 1;
+}
+
+.left-section {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+h2, h3 {
+    color: #333;
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 1em;
+}
+
+h2 {
+    font-size: 1.75em;
+    margin-bottom: 0.5em;
+}
+
+h3 {
+    font-size: 1.2em;
+}
+
+/* Order Summary */
+.order-summary {
+    background-color: #f9fafb;
+    padding: 1.5em;
+    border-radius: 12px;
+    border: 1px solid #dde1e7;
+    color: #444;
+    font-size: 0.95em;
+}
+
+.order-summary p {
+    margin-bottom: 0.6em;
+    font-size: 1em;
+}
+
+
+
+/* Form Styling */
+.payment-form label {
+    display: block;
+    margin-bottom: 0.4em;
+    color: #444;
+    font-weight: 500;
+    font-size: 0.9em;
+}
+
+.payment-form input[type="text"] {
+    width: 100%;
+    padding: 0.9em;
+    margin-bottom: 1.2em;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    font-size: 1em;
+    color: #333;
+    background-color: #fafbfc;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.payment-form input[type="text"]:focus {
+    border-color: #3f8efc;
+    box-shadow: 0 4px 8px rgba(63, 142, 252, 0.15);
+    outline: none;
+}
+
+/* Payment Icons and Security Badge */
+.payment-icons {
+    display: flex;
+    justify-content: center;
+    margin: 1.5em 0;
+    opacity: 0.9;
+}
+
+.payment-icons img {
+    width: 45px;
+    height: auto;
+    margin: 0 0.5em;
+    filter: drop-shadow(0 3px 5px rgba(0, 0, 0, 0.1));
+}
+
+.security-badge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #28a745;
+    font-size: 0.95em;
+    margin-top: 1em;
+}
+
+.security-badge img {
+    margin-right: 0.5em;
+    width: 22px;
+    height: auto;
+}
+
+/* Submit Button */
+.pay-button {
+    width: 100%;
+    padding: 1em;
+    background-color: #3f8efc;
+    color: #fff;
+    font-size: 1.2em;
+    font-weight: bold;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s, box-shadow 0.3s;
+    text-transform: uppercase;
+    box-shadow: 0 4px 8px rgba(63, 142, 252, 0.25);
+}
+
+.pay-button:hover {
+    background-color: #3577db;
+    box-shadow: 0 6px 12px rgba(63, 142, 252, 0.35);
+}
+
+.pay-button:active {
+    background-color: #2e6ac1;
+    box-shadow: none;
+}
+
+/* Support Information */
+.support-info {
+    margin-top: 1.5em;
+    text-align: center;
+    font-size: 0.85em;
+    color: #555;
+}
+
+.support-info a {
+    color: #3f8efc;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.support-info a:hover {
+    color: #3577db;
+    text-decoration: underline;
+}

@@ -91,6 +91,11 @@ app.get('/register2', (req, res) => {
     res.render('pages/register2');
 });
 
+app.get('/payment', (req, res) => {
+    res.render('pages/payment');
+});
+
+
 
 app.get('/home', (req, res) => {
     res.render('pages/home');
