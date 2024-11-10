@@ -29,8 +29,6 @@
     gap: 2em;
    
 }
-
-
 /* Left and Right Sections */
 .left-section, .right-section {
     flex: 1;
