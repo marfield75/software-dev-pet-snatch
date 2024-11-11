@@ -1,7 +1,7 @@
    <div id="g2body">
     <div class="register-container">
         <h2>Pet's information</h2>
-        <form id="petInformationForm" action="#" method="POST">
+        <form id="petInformationForm" action="/register2" method="POST">
             <label for="pet-Name">Pet's Name</label>
             <input type="text" id="pet-Name" name="pet-Name" required>
 
@@ -23,15 +23,6 @@
             <button type="submit">continue</button>
         </form>
     </div>
-
-    <script>
-        // 在表单提交后跳转到其他页面
-document.getElementById('petInformationForm').addEventListener('submit', function(event) {
-    event.preventDefault(); // 防止默认表单提交行为
-     // 跳转到其他页面
-    window.location.href = 'other_page.html'; // 修改为你的目标页面
-});
-
-    </script>
+</div>
 
 </body>

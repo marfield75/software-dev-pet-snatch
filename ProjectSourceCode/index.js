@@ -13,6 +13,7 @@ const session = require('express-session'); // To set the session object. To sto
 const bcrypt = require('bcryptjs'); //  To hash passwords
 const axios = require('axios'); // To make HTTP requests from our server. We'll learn more about it in Part C.
 
+
 // *****************************************************
 // <!-- Section 2 : Connect to DB -->
 // *****************************************************
@@ -107,44 +108,97 @@ app.get('/profile', (req, res) => {
 
 // POST route for handling registration form submission
 app.post('/register', async (req, res) => {
-    const name = await req.body.username;
-    const hashedPassword = await bcrypt.hash(req.body.password, 10);
-    const query = 'INSERT INTO users (username, password) VALUES ($1, $2) RETURNING *;';
-    db.oneOrNone(query, [name, hashedPassword])
-        .then(data => {
-            res.redirect('/login');
-        })
-        .catch(err => {
-            res.redirect('/register');
-        });
+    console.log('Received registration data:', req.body); // Log the request body
+    const { 'first-name': firstName, 'last-name': lastName, email, username, password } = req.body;
+
+    if (!firstName || !lastName || !email || !username || !password) {
+        return res.render('pages/register', { error: 'All fields are required.' });
+    }
+
+    try {
+        const hashedPassword = await bcrypt.hash(password, 10);
+        const query = `
+            INSERT INTO users (first_name, last_name, email, username, password) 
+            VALUES ($1, $2, $3, $4, $5) RETURNING id;
+        `;
+        const newUser = await db.one(query, [firstName, lastName, email, username, hashedPassword]);
+        res.redirect('/login');
+    } catch (err) {
+        if (err.constraint === 'users_username_key') {
+            console.error('Username already exists.');
+            res.render('pages/register', { error: 'Username already taken.' });
+        } else if (err.constraint === 'users_email_key') {
+            console.error('Email already exists.');
+            res.render('pages/register', { error: 'Email already registered.' });
+        } else {
+            console.error('Error during registration:', err);
+            res.render('pages/register', { error: 'Registration failed. Please try again.' });
+        }
+    }
 });
+
+app.post('/register2', async (req, res) => {
+    console.log('Received pet registration data:', req.body); // Log the request body
+    const { petName, petType, petAge, ownerId } = req.body;
+
+    if (!petName || !petType || !petAge || !ownerId) {
+        return res.render('pages/register2', { error: 'All fields are required.' });
+    }
+
+    try {
+        const query = `
+            INSERT INTO pets (name, type, age, owner_id) 
+            VALUES ($1, $2, $3, $4) RETURNING id;
+        `;
+        const newPet = await db.one(query, [petName, petType, petAge, ownerId]);
+        res.redirect('/profile');
+    } catch (err) {
+        console.error('Error during pet registration:', err);
+        res.render('pages/register2', { error: 'Pet registration failed. Please try again.' });
+    }
+});
+
 
 app.post('/login', async (req, res) => {
+    const { username, password } = req.body;
 
-    // Find the user from the database
-    const query = 'SELECT * FROM users WHERE username = $1';
-    db.oneOrNone(query, req.body.username)
-        .then(async data => {
-            user.username = data.username;
-            user.password = data.password;
+    // Log the incoming request body
+    console.log('Login request body:', req.body);
 
-            const match = await bcrypt.compare(req.body.password, user.password);
+    try {
+        const query = 'SELECT * FROM users WHERE username = $1';
+        const user = await db.oneOrNone(query, [username]);
 
-            if (!match) {
-                // If password doesn't match, render login page with error message
-                res.render('pages/login', { error: 'Incorrect username or password.' });
-            } else {
-                req.session.user = user;
-                req.session.save();
-                res.redirect('/home');
-            }
-        })
-        .catch(err => {
+        if (!user) {
+            console.log('No user found with username:', username);
+            return res.render('pages/login', { error: 'Incorrect username or password.' });
+        }
 
-            res.redirect('/register');
-        });
+        // Log found user details (excluding password for security)
+        console.log('User found:', { id: user.id, username: user.username });
+
+        const match = await bcrypt.compare(password, user.password);
+
+        if (!match) {
+            console.log('Password does not match for user:', username);
+            return res.render('pages/login', { error: 'Incorrect username or password.' });
+        }
+
+        req.session.user = {
+            id: user.id,
+            username: user.username,
+            email: user.email,
+        };
+        await req.session.save();
+
+        res.redirect('/home');
+    } catch (err) {
+        console.error('Login error:', err);
+        res.render('pages/login', { error: 'An error occurred. Please try again.' });
+    }
 });
-//Authentication MiddleWare
+
+
 const auth = (req, res, next) => {
     if (!req.session.user) {
         // Store the original URL to redirect after login
