@@ -1,17 +1,77 @@
-INSERT INTO users (id, username, first_name, last_name, password, email)
-VALUES (1, 'jamie1', 'James', 'Smith', '$2a$12$QyCbeD4dC6hOCKZF3W9Mx.AZ5p.JrEyyX2cZIKhwnJFLuUcttd23q', 'jm2004@gmail.com'), 
-(2, 'john2', 'John', 'Green', '$2a$12$u4QxxWvwhQFkLp.CfeeGbO1kCh8xF.aHLu4tGvnE5zu65YqDcDWPS', 'jg1998@gmail.com'),
-(3, 'Tom3', 'Tom', 'Blue', '$2a$12$dSmpFORwoVlBcHksxozPC.ETPdOd71Iru6IRDlkcNgCigONZStq3C', 'tb1997@gmail.com');
+insert into users (id, username, first_name, last_name, password, password_hash, email) values (1, 'epalombi0', 'Elizabet', 'Palombi', 'jN2$tBQ{', '$2a$04$TCOeM/vbqdHMDrNpc2pEzusZTtWT7gptw80oCBx5HINVf/ZtAVB3a', 'epalombi0@imdb.com');
+insert into users (id, username, first_name, last_name, password, password_hash, email) values (2, 'dbredee1', 'Damon', 'Bredee', 'lV0?IpQ1z1H7OV', '$2a$04$Hu5rvah2w52qN/OGdcPXT.upRPL0u062vobMszsDu.jNb82LzRSli', 'dbredee1@washington.edu');
+insert into users (id, username, first_name, last_name, password, password_hash, email) values (3, 'zuzielli2', 'Zelma', 'Uzielli', 'qJ3%L4!F},4BFD4', '$2a$04$a5JB40Wa1duYltLNP.HN3uoodysg110xLcy3Yxv1Cjo5bk0Bq5yDa', 'zuzielli2@seattletimes.com');
+insert into users (id, username, first_name, last_name, password, password_hash, email) values (4, 'achrippes3', 'Augusto', 'Chrippes', 'iX4~|p9{X9PHRu', '$2a$04$J7Pe5IRO4RkH7AIlW2c8PuKTff9QccoSEPSP7MYkyrNkqzW.jaz6m', 'achrippes3@cargocollective.com');
+insert into users (id, username, first_name, last_name, password, password_hash, email) values (5, 'asmitten4', 'Amandi', 'Smitten', 'qM2~F~zz,"q', '$2a$04$9k5KxUlP94gKqmTmFFRP8u6sZmwwTcbwLywsrpNBqk8NWgLzaBwEq', 'asmitten4@eepurl.com');
+insert into users (id, username, first_name, last_name, password, password_hash, email) values (6, 'rpennone5', 'Row', 'Pennone', 'iN1&dcgZ@', '$2a$04$fEQlb6GoSSG7ZDxPiAaSDuJUrUiMRxMrTXOXZN00Q8SrgxI.1DYaK', 'rpennone5@sohu.com');
+insert into users (id, username, first_name, last_name, password, password_hash, email) values (7, 'krowlin6', 'Kelwin', 'Rowlin', 'nN2{faqo', '$2a$04$eRM5LQQofjtkiw29qn6W5eQHeO3jlvFZ7fiCfq0Bxv9GbdO8wfO8C', 'krowlin6@g.co');
+insert into users (id, username, first_name, last_name, password, password_hash, email) values (8, 'asuter7', 'Agnola', 'Suter', 'dQ5$&KzqH_uxO', '$2a$04$b7zmG91S/R1V7LAmfq8T0e5ELF1XqEMpFyP.nWWj/HYE1Iyzlu9T.', 'asuter7@simplemachines.org');
+insert into users (id, username, first_name, last_name, password, password_hash, email) values (9, 'dcunniam8', 'Doro', 'Cunniam', 'tO0!S#spvg88', '$2a$04$1UYeu5jsulVaU0CVZTNZee8pgloRIwP1uVg3l2wAJzAr.IIgwThCe', 'dcunniam8@fema.gov');
+insert into users (id, username, first_name, last_name, password, password_hash, email) values (10, 'rroderham9', 'Randene', 'Roderham', 'bX5>N|065', '$2a$04$wViaFfUUuNCx5qWMQ/dLLuudRry1nQ5xbPK35ZPGsCHwal6yYIqc.', 'rroderham9@archive.org');
+insert into users (id, username, first_name, last_name, password, password_hash, email) values (11, 'ayoselevitcha', 'Arch', 'Yoselevitch', 'gF8&T9{"$Tg_', '$2a$04$vv7hXOlyx9xRjJFs5HHOO.4VXl2PWfkuEQFL9JXjL10exV42JC/Hi', 'ayoselevitcha@pen.io');
+insert into users (id, username, first_name, last_name, password, password_hash, email) values (12, 'emardlingb', 'Enid', 'Mardling', 'gF0{D+(I\PT', '$2a$04$oOXDWvw9lgFJq3Ic.Uj6OuOiXtNGLyGNe7OqWuyyMRsT7B1QulnEa', 'emardlingb@usgs.gov');
+insert into users (id, username, first_name, last_name, password, password_hash, email) values (13, 'bboarerc', 'Bob', 'Boarer', 'dW6_(jD{Rf', '$2a$04$/lsUD.LEJfaP5vj443iUwe6TxS5Mu5t9l0d3zGi/kpmWe.cT5oa2m', 'bboarerc@mit.edu');
+insert into users (id, username, first_name, last_name, password, password_hash, email) values (14, 'jworcsd', 'Jecho', 'Worcs', 'nR4#Nsr5?\l)Vy', '$2a$04$Gbo/P6vuJ/A7Q/JXcX0kN.XEYvdHrma9pQiQ2T1/hd36YQWdOepz2', 'jworcsd@nydailynews.com');
+insert into users (id, username, first_name, last_name, password, password_hash, email) values (15, 'llangelaane', 'Leisha', 'Langelaan', 'rN2&HEJA2', '$2a$04$LRAZv89Pgwr0PF5Qcup/N.suism98yr/Za.s8YgftjNxWDGGbxOom', 'llangelaane@unesco.org');
+insert into users (id, username, first_name, last_name, password, password_hash, email) values (16, 'sjardeinf', 'Sibylle', 'Jardein', 'dQ6*$WYZ', '$2a$04$4UA6Vonleb3md5lPXmRrkuDP9GU3fEsRkz0FfeBIla93KqZHuxZKK', 'sjardeinf@cnn.com');
+insert into users (id, username, first_name, last_name, password, password_hash, email) values (17, 'mmalpassg', 'Melisent', 'Malpass', 'uC2~Wd=C<|K~', '$2a$04$/vK5okc7axOFKB6nam6.r.4k3UH9nUZ4iTa9mc8bqrzixLrNCYyp2', 'mmalpassg@cbc.ca');
+insert into users (id, username, first_name, last_name, password, password_hash, email) values (18, 'egosnoldh', 'Evangelin', 'Gosnold', 'pD3{I#zdTc', '$2a$04$K9B107P9UM5k5d6CEI2vHuV4BoOl1dnQOkNdMtnAcwtQ2CdjSEXpy', 'egosnoldh@bloglines.com');
+insert into users (id, username, first_name, last_name, password, password_hash, email) values (19, 'stibbsi', 'Shaylynn', 'Tibbs', 'wY0|?1j*', '$2a$04$5qu6d8kEvhFBYMq3tXrkp.NeRVZQ0psCW9aTRgZHqI0mVqPncwAba', 'stibbsi@house.gov');
+insert into users (id, username, first_name, last_name, password, password_hash, email) values (20, 'eyglesiaj', 'Eran', 'Yglesia', 'cO9{,pT5C', '$2a$04$pOhmwA9SKqnmf8Bv6dWbmerYvvvniOcLuT1TqLydWlbVUiFEModcC', 'eyglesiaj@woothemes.com');
+insert into users (id, username, first_name, last_name, password, password_hash, email) values (21, 'gsotworthk', 'Georgianna', 'Sotworth', 'bV6}m{EsCd', '$2a$04$HeMHH1ukF9P7zNCbfRHQnej2hUaKWHAG3r679x3aDWGZY00U0qnEq', 'gsotworthk@liveinternet.ru');
+insert into users (id, username, first_name, last_name, password, password_hash, email) values (22, 'kdowearsl', 'Konrad', 'Dowears', 'tL0_l.}ae)H', '$2a$04$uptE7CYGZ2SGn9GDr7KM3upg8x6yAsaX0tkLTtgaaKof6IsOMDh3C', 'kdowearsl@fda.gov');
+insert into users (id, username, first_name, last_name, password, password_hash, email) values (23, 'ekynanm', 'Edouard', 'Kynan', 'zT7=@/|WaLri', '$2a$04$H5dZ3XzU2/ai6.LjEYBFg.wCgZZjNxu1Y.timJgLNLE5wHODnls0y', 'ekynanm@posterous.com');
+insert into users (id, username, first_name, last_name, password, password_hash, email) values (24, 'lratcliffn', 'Lorry', 'Ratcliff', 'hI8\/P)''fJGV@', '$2a$04$SPKkepscHbispkY/MPn66.5TaEPY0Nr1e0B3D8KN/IreaVJa4zeC.', 'lratcliffn@google.it');
+insert into users (id, username, first_name, last_name, password, password_hash, email) values (25, 'bgarretto', 'Berthe', 'Garrett', 'oD5}+X61', '$2a$04$qD0lPMMRW79Lk56bIluax.xNF/9UsDacO47US3m6UQXNaGlUl1f4y', 'bgarretto@nbcnews.com');
 
-INSERT INTO pets (id, name, class, breed, eye_color, birthday, location, bio)
-VALUES (1, 'rocky', 'dog', 'golden retriever', 'brown', '2022-06-07','Boulder, Colorado', '-'),
-(2, 'tommy', 'dog', 'pitbull', 'brown', '2021-07-27','Denver, Colorado', '-');
+insert into pets (id, name, class, breed, age, color, weight, birthday, eye_color, location, bio) values (1, 'Toiboid Legh', 'Ocelot', 'Ragdoll', 11.4, 'Green', 1.5, '6/6/2007', 'Aquamarine', 'Belyye Stolby', '-');
+insert into pets (id, name, class, breed, age, color, weight, birthday, eye_color, location, bio) values (2, 'Daffie Blissitt', 'Weaver, red-billed buffalo', 'Golden Retriever', 5.9, 'Fuscia', 178.3, '4/26/2003', 'Teal', 'Cangkreng', '-');
+insert into pets (id, name, class, breed, age, color, weight, birthday, eye_color, location, bio) values (3, 'Rriocard Guilloux', 'Chilean flamingo', 'Labrador Retriever', 15.6, 'Purple', 147.7, '7/26/2013', 'Red', 'Adiaké', '-');
+insert into pets (id, name, class, breed, age, color, weight, birthday, eye_color, location, bio) values (4, 'Cariotta Leonard', 'Sheep, stone', 'German Shepherd', 5.9, 'Orange', 104.8, '10/20/2013', 'Teal', 'Petrivka', '-');
+insert into pets (id, name, class, breed, age, color, weight, birthday, eye_color, location, bio) values (5, 'Chickie Dinneen', 'Southern boubou', 'Labrador Retriever', 1.2, 'Red', 18.0, '3/31/2007', 'Yellow', 'Alíartos', '-');
+insert into pets (id, name, class, breed, age, color, weight, birthday, eye_color, location, bio) values (6, 'Maurie Somerville', 'Hyena, striped', 'Ragdoll', 15.6, 'Khaki', 191.4, '6/13/2007', 'Crimson', 'Kalān Deh', '-');
+insert into pets (id, name, class, breed, age, color, weight, birthday, eye_color, location, bio) values (7, 'Oralia Spencelayh', 'Possum, pygmy', 'Bengal', 3.9, 'Maroon', 131.7, '11/15/2015', 'Aquamarine', 'Hongqi', '-');
+insert into pets (id, name, class, breed, age, color, weight, birthday, eye_color, location, bio) values (8, 'Sharlene Denacamp', 'Hanuman langur', 'Ragdoll', 19.2, 'Mauv', 160.6, '9/6/2007', 'Indigo', 'Daogao', '-');
+insert into pets (id, name, class, breed, age, color, weight, birthday, eye_color, location, bio) values (9, 'Susanna Costy', 'Grouse, sage', 'Labrador Retriever', 7.4, 'Mauv', 91.3, '9/3/2006', 'Indigo', 'Los Pinos', '-');
+insert into pets (id, name, class, breed, age, color, weight, birthday, eye_color, location, bio) values (10, 'Frasquito Dust', 'Sheep, red', 'German Shepherd', 8.7, 'Red', 120.0, '10/15/2020', 'Orange', 'Nal’chik', '-');
+insert into pets (id, name, class, breed, age, color, weight, birthday, eye_color, location, bio) values (11, 'Aimee Glynn', 'Deer, swamp', 'Ragdoll', 11.5, 'Aquamarine', 59.9, '8/5/2006', 'Yellow', 'Fubin', '-');
+insert into pets (id, name, class, breed, age, color, weight, birthday, eye_color, location, bio) values (12, 'Elisa Cotterell', 'Dusky gull', 'Persian', 12.1, 'Fuscia', 117.1, '12/30/2008', 'Turquoise', 'Dalonghua', '-');
+insert into pets (id, name, class, breed, age, color, weight, birthday, eye_color, location, bio) values (13, 'Walton Martyntsev', 'Woolly-necked stork', 'Bengal', 18.8, 'Crimson', 68.2, '4/21/2019', 'Puce', 'Glubokiy', '-');
+insert into pets (id, name, class, breed, age, color, weight, birthday, eye_color, location, bio) values (14, 'Blondy Danielkiewicz', 'Francolin, coqui', 'Siamese', 9.2, 'Crimson', 64.4, '1/23/2000', 'Violet', 'Lukavice', '-');
+insert into pets (id, name, class, breed, age, color, weight, birthday, eye_color, location, bio) values (15, 'Alessandra Yanukhin', 'Blue peacock', 'Golden Retriever', 5.0, 'Crimson', 38.8, '9/4/2009', 'Crimson', 'Damanhūr', '-');
+insert into pets (id, name, class, breed, age, color, weight, birthday, eye_color, location, bio) values (16, 'Darryl Robrow', 'Brindled gnu', 'Golden Retriever', 18.0, 'Indigo', 13.5, '1/14/2019', 'Indigo', 'Novomichurinsk', '-');
+insert into pets (id, name, class, breed, age, color, weight, birthday, eye_color, location, bio) values (17, 'Finley Stonehewer', 'Seal, harbor', 'German Shepherd', 16.4, 'Indigo', 153.6, '4/12/2013', 'Goldenrod', 'Kertasari', '-');
+insert into pets (id, name, class, breed, age, color, weight, birthday, eye_color, location, bio) values (18, 'Gianna Cone', 'Eastern cottontail rabbit', 'Persian', 10.0, 'Orange', 4.7, '10/28/2009', 'Puce', 'Huayan', '-');
+insert into pets (id, name, class, breed, age, color, weight, birthday, eye_color, location, bio) values (19, 'Eben Trunby', 'Painted stork', 'Golden Retriever', 18.6, 'Purple', 92.5, '9/11/2012', 'Teal', 'Piława Górna', '-');
+insert into pets (id, name, class, breed, age, color, weight, birthday, eye_color, location, bio) values (20, 'Javier Audenis', 'Frogmouth, tawny', 'Beagle', 2.6, 'Green', 43.7, '1/2/2002', 'Maroon', 'Kristinestad', '-');
+insert into pets (id, name, class, breed, age, color, weight, birthday, eye_color, location, bio) values (21, 'Larine Courtier', 'Hudsonian godwit', 'Golden Retriever', 15.5, 'Violet', 39.2, '12/16/2013', 'Teal', 'Dodola', '-');
+insert into pets (id, name, class, breed, age, color, weight, birthday, eye_color, location, bio) values (22, 'Vaughn Huyhton', 'Starfish, crown of thorns', 'Labrador Retriever', 15.2, 'Orange', 11.0, '1/26/2008', 'Yellow', 'Ajdabiya', '-');
+insert into pets (id, name, class, breed, age, color, weight, birthday, eye_color, location, bio) values (23, 'Law Pensom', 'Fox, silver-backed', 'Golden Retriever', 19.8, 'Yellow', 129.4, '1/24/2009', 'Purple', 'Málaga', '-');
+insert into pets (id, name, class, breed, age, color, weight, birthday, eye_color, location, bio) values (24, 'Annice Sichardt', 'Weaver, red-billed buffalo', 'Ragdoll', 11.3, 'Goldenrod', 120.5, '1/9/2010', 'Red', 'Viljoenskroon', '-');
+insert into pets (id, name, class, breed, age, color, weight, birthday, eye_color, location, bio) values (25, 'Bern Valente', 'Snowy owl', 'Beagle', 14.6, 'Aquamarine', 162.4, '1/4/2005', 'Crimson', 'Monastyrshchina', '-');
 
-INSERT INTO users_to_pets(user_id, pet_id)
-VALUES (2, 1),
-(3, 2);
-
-
--- 1, jm@1
--- 2, jg@1
--- 3, tb@1
+insert into users_to_pets (user_id, pet_id) values (1, 1);
+insert into users_to_pets (user_id, pet_id) values (2, 2);
+insert into users_to_pets (user_id, pet_id) values (3, 3);
+insert into users_to_pets (user_id, pet_id) values (4, 4);
+insert into users_to_pets (user_id, pet_id) values (5, 5);
+insert into users_to_pets (user_id, pet_id) values (6, 6);
+insert into users_to_pets (user_id, pet_id) values (7, 7);
+insert into users_to_pets (user_id, pet_id) values (8, 8);
+insert into users_to_pets (user_id, pet_id) values (9, 9);
+insert into users_to_pets (user_id, pet_id) values (10, 10);
+insert into users_to_pets (user_id, pet_id) values (11, 11);
+insert into users_to_pets (user_id, pet_id) values (12, 12);
+insert into users_to_pets (user_id, pet_id) values (13, 13);
+insert into users_to_pets (user_id, pet_id) values (14, 14);
+insert into users_to_pets (user_id, pet_id) values (15, 15);
+insert into users_to_pets (user_id, pet_id) values (16, 16);
+insert into users_to_pets (user_id, pet_id) values (17, 17);
+insert into users_to_pets (user_id, pet_id) values (18, 18);
+insert into users_to_pets (user_id, pet_id) values (19, 19);
+insert into users_to_pets (user_id, pet_id) values (20, 20);
+insert into users_to_pets (user_id, pet_id) values (21, 21);
+insert into users_to_pets (user_id, pet_id) values (22, 22);
+insert into users_to_pets (user_id, pet_id) values (23, 23);
+insert into users_to_pets (user_id, pet_id) values (24, 24);
+insert into users_to_pets (user_id, pet_id) values (25, 25);

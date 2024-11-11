@@ -4,6 +4,7 @@ CREATE TABLE users(
     first_name text, 
     last_name text,
     password text,
+    password_hash text,
     email text
 );
 
@@ -12,8 +13,11 @@ CREATE TABLE pets(
     name text,
     class text,
     breed text,
-    eye_color text,
+    age SMALLINT,
+    color text,
+    weight SMALLINT,
     birthday DATE, 
+    eye_color text,
     location text,
     bio text   
 );
