@@ -15,7 +15,8 @@ CREATE TABLE pets(
     eye_color text,
     birthday DATE, 
     location text,
-    bio text   
+    bio text,
+    image_url text
 );
 
 CREATE TABLE users_to_pets(

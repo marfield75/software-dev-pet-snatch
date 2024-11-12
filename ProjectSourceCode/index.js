@@ -12,7 +12,7 @@ const bodyParser = require('body-parser');
 const session = require('express-session'); // To set the session object. To store or access session data, use the `req.session`, which is (generally) serialized as JSON by the store.
 const bcrypt = require('bcryptjs'); //  To hash passwords
 const axios = require('axios'); // To make HTTP requests from our server. We'll learn more about it in Part C.
-
+const multer = require('multer');
 
 // *****************************************************
 // <!-- Section 2 : Connect to DB -->
@@ -33,6 +33,17 @@ const dbConfig = {
     user: process.env.POSTGRES_USER, // the user account to connect with
     password: process.env.POSTGRES_PASSWORD, // the password of the user account
 };
+
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, path.join(__dirname, '../../src/resources/img/')); // Save to the specified folder
+    },
+    filename: (req, file, cb) => {
+        cb(null, Date.now() + path.extname(file.originalname)); // Unique filename using current timestamp
+    }
+});
+
+const upload = multer({ storage: storage });
 
 const db = pgp(dbConfig);
 
@@ -132,27 +143,27 @@ app.post('/register', async (req, res) => {
     }
 });
 
-app.post('/register2', async (req, res) => {
+app.post('/register2', upload.single('petImage'), async (req, res) => {
     console.log('Received pet registration data:', req.body); // Log the request body
     const { petName, petType, petAge, ownerId } = req.body;
+    const petImage = req.file ? req.file.filename : null; // Get the filename if an image is uploaded
 
-    if (!petName || !petType || !petAge || !ownerId) {
+    if (!petName || !petType || !petAge || !ownerId || !petImage) {
         return res.render('pages/register2', { error: 'All fields are required.' });
     }
 
     try {
         const query = `
-            INSERT INTO pets (name, type, age, owner_id) 
-            VALUES ($1, $2, $3, $4) RETURNING id;
+            INSERT INTO pets (name, type, age, owner_id, image_url) 
+            VALUES ($1, $2, $3, $4, $5) RETURNING id;
         `;
-        const newPet = await db.one(query, [petName, petType, petAge, ownerId]);
+        const newPet = await db.one(query, [petName, petType, petAge, ownerId, petImage]);
         res.redirect('/profile');
     } catch (err) {
         console.error('Error during pet registration:', err);
         res.render('pages/register2', { error: 'Pet registration failed. Please try again.' });
     }
 });
-
 
 app.post('/login', async (req, res) => {
     const { username, password } = req.body;
