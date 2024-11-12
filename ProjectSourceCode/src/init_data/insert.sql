@@ -24,11 +24,6 @@ insert into users (id, username, first_name, last_name, password, password_hash,
 insert into users (id, username, first_name, last_name, password, password_hash, email) values (24, 'lratcliffn', 'Lorry', 'Ratcliff', 'hI8\/P)''fJGV@', '$2a$04$SPKkepscHbispkY/MPn66.5TaEPY0Nr1e0B3D8KN/IreaVJa4zeC.', 'lratcliffn@google.it');
 insert into users (id, username, first_name, last_name, password, password_hash, email) values (25, 'bgarretto', 'Berthe', 'Garrett', 'oD5}+X61', '$2a$04$qD0lPMMRW79Lk56bIluax.xNF/9UsDacO47US3m6UQXNaGlUl1f4y', 'bgarretto@nbcnews.com');
 
-<<<<<<< david-endpoints
-INSERT INTO pets (id, name, class, breed, eye_color, birthday, location, bio, image_url)
-VALUES (1, 'rocky', 'dog', 'golden retriever', 'brown', '2022-06-07','Boulder, Colorado', '-', 'IMG_8890.jpg'),
-(2, 'tommy', 'dog', 'pitbull', 'brown', '2021-07-27','Denver, Colorado', '-', 'IMG_8892.jpg');
-=======
 insert into pets (id, name, class, breed, age, color, weight, birthday, eye_color, location, bio) values (1, 'Toiboid Legh', 'Ocelot', 'Ragdoll', 11.4, 'Green', 1.5, '6/6/2007', 'Aquamarine', 'Belyye Stolby', '-');
 insert into pets (id, name, class, breed, age, color, weight, birthday, eye_color, location, bio) values (2, 'Daffie Blissitt', 'Weaver, red-billed buffalo', 'Golden Retriever', 5.9, 'Fuscia', 178.3, '4/26/2003', 'Teal', 'Cangkreng', '-');
 insert into pets (id, name, class, breed, age, color, weight, birthday, eye_color, location, bio) values (3, 'Rriocard Guilloux', 'Chilean flamingo', 'Labrador Retriever', 15.6, 'Purple', 147.7, '7/26/2013', 'Red', 'Adiaké', '-');
@@ -54,7 +49,6 @@ insert into pets (id, name, class, breed, age, color, weight, birthday, eye_colo
 insert into pets (id, name, class, breed, age, color, weight, birthday, eye_color, location, bio) values (23, 'Law Pensom', 'Fox, silver-backed', 'Golden Retriever', 19.8, 'Yellow', 129.4, '1/24/2009', 'Purple', 'Málaga', '-');
 insert into pets (id, name, class, breed, age, color, weight, birthday, eye_color, location, bio) values (24, 'Annice Sichardt', 'Weaver, red-billed buffalo', 'Ragdoll', 11.3, 'Goldenrod', 120.5, '1/9/2010', 'Red', 'Viljoenskroon', '-');
 insert into pets (id, name, class, breed, age, color, weight, birthday, eye_color, location, bio) values (25, 'Bern Valente', 'Snowy owl', 'Beagle', 14.6, 'Aquamarine', 162.4, '1/4/2005', 'Crimson', 'Monastyrshchina', '-');
->>>>>>> main
 
 insert into users_to_pets (user_id, pet_id) values (1, 1);
 insert into users_to_pets (user_id, pet_id) values (2, 2);
