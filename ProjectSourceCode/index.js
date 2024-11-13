@@ -129,10 +129,10 @@ app.post('/register', async (req, res) => {
     try {
         const hashedPassword = await bcrypt.hash(password, 10);
         const query = `
-            INSERT INTO users (first_name, last_name, email, username, password) 
-            VALUES ($1, $2, $3, $4, $5) RETURNING id;
+            INSERT INTO users (username, first_name, last_name, password_hash, email) 
+            VALUES ($1, $2, $3, $4, $5);
         `;
-        const newUser = await db.one(query, [firstName, lastName, email, username, hashedPassword]);
+        const newUser = await db.none(query, [username, firstName, lastName, hashedPassword, email]);
         res.redirect('/login');
     } catch (err) {
         if (err.constraint === 'users_username_key') {
@@ -159,7 +159,7 @@ app.post('/register2', upload.single('petImage'), async (req, res) => {
 
     try {
         const query = `
-            INSERT INTO pets (name, type, age, owner_id, image_url) 
+            INSERT INTO pets (id, name, type, age, owner_id, image_url) 
             VALUES ($1, $2, $3, $4, $5) RETURNING id;
         `;
         const newPet = await db.one(query, [petName, petType, petAge, ownerId, petImage]);
