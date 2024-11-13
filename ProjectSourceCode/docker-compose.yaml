@@ -8,7 +8,6 @@ services:
     volumes:
       - group-project:/var/lib/postgresql/data
       - ./src/init_data:/docker-entrypoint-initdb.d
-      - ./src/resources/imgs/img:/app/src/resources/img
   web:
     image: node:lts
     # user: 'node'
@@ -22,6 +21,8 @@ services:
       - '3000:3000'
     volumes:
       - ./:/home/node/app
+      - ./src/resources/imgs/img:/app/src/resources/img
+
     command: 'npm start'
 volumes:
   group-project:

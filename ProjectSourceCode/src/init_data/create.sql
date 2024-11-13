@@ -1,5 +1,5 @@
 CREATE TABLE users(
-    id SERIAL PRIMARY KEY,
+    id SERIAL PRIMARY KEY UNIQUE,
     username text,
     first_name text, 
     last_name text,
@@ -27,3 +27,5 @@ CREATE TABLE users_to_pets(
     user_id SMALLINT,
     pet_id SMALLINT
 );
+
+
