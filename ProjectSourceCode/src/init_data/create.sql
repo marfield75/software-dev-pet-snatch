@@ -3,7 +3,6 @@ CREATE TABLE users(
     username text,
     first_name text, 
     last_name text,
-    password text,
     password_hash text,
     email text
 );
