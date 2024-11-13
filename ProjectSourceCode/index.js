@@ -119,12 +119,16 @@ app.get('/profile', (req, res) => {
 
 // POST route for handling registration form submission
 app.post('/register', async (req, res) => {
-    console.log('Received registration data:', req.body); // Log the request body
     const { 'first-name': firstName, 'last-name': lastName, email, username, password } = req.body;
 
     if (!firstName || !lastName || !email || !username || !password) {
         return res.render('pages/register', { error: 'All fields are required.' });
     }
+
+    // Log the request body (excluding the password for security)
+    const safeBody = { ...req.body };
+    delete safeBody.password;
+    console.log('Received registration data:', safeBody);
 
     try {
         const hashedPassword = await bcrypt.hash(password, 10);
@@ -159,10 +163,10 @@ app.post('/register2', upload.single('petImage'), async (req, res) => {
 
     try {
         const query = `
-            INSERT INTO pets (id, name, type, age, owner_id, image_url) 
+            INSERT INTO pets (name, type, age, owner_id, image_url) 
             VALUES ($1, $2, $3, $4, $5) RETURNING id;
         `;
-        const newPet = await db.one(query, [petName, petType, petAge, ownerId, petImage]);
+        const newPet = await db.none(query, [petName, petType, petAge, ownerId, petImage]);
         res.redirect('/profile');
     } catch (err) {
         console.error('Error during pet registration:', err);
@@ -173,8 +177,10 @@ app.post('/register2', upload.single('petImage'), async (req, res) => {
 app.post('/login', async (req, res) => {
     const { username, password } = req.body;
 
-    // Log the incoming request body
-    console.log('Login request body:', req.body);
+    // Log the incoming request body (excluding the password for security)
+    const safeBody = { ...req.body };
+    delete safeBody.password;
+    console.log('Login request body:', safeBody);
 
     try {
         const query = 'SELECT * FROM users WHERE username = $1';
@@ -188,7 +194,7 @@ app.post('/login', async (req, res) => {
         // Log found user details (excluding password for security)
         console.log('User found:', { id: user.id, username: user.username });
 
-        const match = await bcrypt.compare(password, user.password);
+        const match = await bcrypt.compare(password, user.password_hash);
 
         if (!match) {
             console.log('Password does not match for user:', username);
