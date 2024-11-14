@@ -1,11 +1,40 @@
-<!-- profile page-->
 <!-- profile.hbs -->
-<h1>Profile Page</h1>
+<div class="container mt-5">
+    <!-- Profile Header -->
+    <div class="profile-header">
+        <h1>Welcome, {{user.first_name}} {{user.last_name}}</h1>
+        <p><strong>Username:</strong> {{user.username}}</p>
+        <p><strong>Email:</strong> {{user.email}}</p>
+        <a href="/editProfile" class="btn btn-primary mt-2">Edit Profile</a>
+    </div>
 
-<div>
-    <p><strong>Username:</strong> {{user.username}}</p>
-    <p><strong>Name:</strong> {{user.name}}</p>
-    <p><strong>Location:</strong> {{user.location}}</p>
+    <!-- User's Pets Section -->
+    <h2 class="mt-5">Your Pets</h2>
+    <div class="row">
+        {{#if user.pets.length}}
+            {{#each user.pets}}
+                <div class="col-md-4 pet-card">
+                    <div class="card">
+                        <!-- Pet Image -->
+                        <img src="{{this.image_url}}" class="card-img-top" alt="{{this.name}}" onerror="this.src='https://via.placeholder.com/150';" />
+                        <div class="card-body">
+                            <!-- Pet Info -->
+                            <h5 class="card-title">{{this.name}}</h5>
+                            <p class="card-text">
+                                <strong>Class:</strong> {{this.class}}<br>
+                                <strong>Breed:</strong> {{this.breed}}<br>
+                                <strong>Age:</strong> {{this.age}}<br>
+                                <strong>Color:</strong> {{this.color}}<br>
+                                <strong>Eye Color:</strong> {{this.eye_color}}<br>
+                                <strong>Location:</strong> {{this.location}}<br>
+                            </p>
+                            <p class="card-text"><small class="text-muted">{{this.bio}}</small></p>
+                        </div>
+                    </div>
+                </div>
+            {{/each}}
+        {{else}}
+            <p class="text-muted">No pets added yet.</p>
+        {{/if}}
+    </div>
 </div>
-
-<a href="/editProfile" class="btn btn-primary">Edit Profile</a>
