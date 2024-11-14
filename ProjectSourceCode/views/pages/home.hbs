@@ -61,13 +61,16 @@
 
 <body>
     {{!-- <a href="/pet">Pets</a> --}}
+    {{!-- Pet cards displayed on the home page --}}
     <div class="row">
         <div class="column">
             <div class="card">
                 <div class="container">
-                    <img src="" alt="PET IMAGE">
-                    <h4><b>Pet Name</b></h4>
-                    <p>Pet Description</p>
+                    <div class="pet-info">
+                        <img src="" alt="PET IMAGE">
+                        <h4><b>Pet Name</b></h4>
+                        <p>Pet Description</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -372,9 +375,9 @@
 
 </html>
 
-<!-- <div class="pet-info">
+{{!-- <div class="pet-info">
     <h3>{{pet.name}}</h3>
     <p>Type: {{pet.type}}</p>
     <p>Age: {{pet.age}}</p>
     <img src="/img/{{pet.image_url}}" alt="{{pet.name}}" />
-</div> -->
+</div> --}}
