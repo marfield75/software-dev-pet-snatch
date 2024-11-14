@@ -113,9 +113,46 @@ app.get('/home', (req, res) => {
     res.render('pages/home');
 });
 
-app.get('/profile', (req, res) => {
-    res.render('pages/profile')
+//render profile page
+app.get('/profile', async (req, res) => {
+    try {
+        const username = req.user.username;
+        const userData = await getUserData(username);
+
+        res.render('profile', { user: userData });
+    } catch (error) {
+        res.status(500).send('Error retrieving profile information');
+    }
 });
+
+app.get('/editProfile', (req, res) => {
+    res.render('editProfile', {
+        user: req.user 
+    });
+});
+//get username for profile page
+async function getUserData(username) {
+    try {
+        // Define the query to select user data by username
+        const query = `
+            SELECT username, first_name, last_name, email
+            FROM users
+            WHERE username = $1
+        `;
+
+        // Execute the query and store the result
+        const userData = await db.oneOrNone(query, [username]);
+
+        if (!userData) {
+            throw new Error('User not found');
+        }
+
+        return userData;
+    } catch (error) {
+        console.error('Error fetching user data:', error);
+        throw error;
+    }
+}
 
 // POST route for handling registration form submission
 app.post('/register', async (req, res) => {
