@@ -36,7 +36,7 @@ const dbConfig = {
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, path.join(__dirname, '../../src/resources/img/')); // Save to the specified folder
+       cb(null, path.join(__dirname, 'src/resources/img/')); // Save to the specified folder
     },
     filename: (req, file, cb) => {
         cb(null, Date.now() + path.extname(file.originalname)); // Unique filename using current timestamp
@@ -191,21 +191,23 @@ app.post('/register', async (req, res) => {
     }
 });
 
-app.post('/register2', upload.single('petImage'), async (req, res) => {
+app.post('/register2', upload.single('Image'), async (req, res) => {
     console.log('Received pet registration data:', req.body); // Log the request body
-    const { petName, petType, petAge, ownerId } = req.body;
-    const petImage = req.file ? req.file.filename : null; // Get the filename if an image is uploaded
+    const { petName, petClass, petAge, petColor,  petWeight, petBreed, petEyecolor, petBirthday, petBio, petLoc } = req.body;
+    const petImage = req.file.filename;
 
-    if (!petName || !petType || !petAge || !ownerId || !petImage) {
+    if (!petName || !petClass || !petAge || !petColor || !petWeight || !petBreed || !petEyecolor || !petBirthday || !petBio || !petLoc || !petImage) {
         return res.render('pages/register2', { error: 'All fields are required.' });
     }
 
     try {
+        console.log(petImage);
+        const imageUrl = `src/resources/img/${petImage}`;
         const query = `
-            INSERT INTO pets (name, type, age, owner_id, image_url) 
-            VALUES ($1, $2, $3, $4, $5) RETURNING id;
+            INSERT INTO pets (name, class, breed, age, color, weight, birthday, eye_color, location, bio, image_url)
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11);
         `;
-        const newPet = await db.none(query, [petName, petType, petAge, ownerId, petImage]);
+        const newPet = await db.none(query, [petName, petClass, petBreed, petAge, petColor, petWeight, petBirthday, petEyecolor, petLoc, petBio, imageUrl]);
         res.redirect('/profile');
     } catch (err) {
         console.error('Error during pet registration:', err);
