@@ -25,15 +25,114 @@
   }
   
   .center-image {
-    height: 50px; /* 图片大小可以根据需求调整 */
-    margin-right: 10px; /* 图片和文字之间的间距 */
+    height: 50px; 
+    margin-right: 10px; /
   }
   
   .center-text {
-    font-family: 'Dancing Script', cursive; /* 花体字体 */
+    font-family: 'Dancing Script', cursive; 
     font-size: 1.5rem;
     font-weight: bold;
-    color: #333; /* 文字颜色 */
+    color: #333; 
   }
   
-  
+
+
+
+/* 初始时隐藏详情菜单 */
+.hidden {
+  display: none;
+}
+
+.dropdown-menu.show {
+  display: block;
+}
+
+/* 搜索菜单的基本样式 */
+.nav-item.dropdown {
+  position: relative;
+}
+
+/* 让菜单显示为三列 */
+.dropdown-menu {
+  display: none;
+  flex-wrap: wrap;
+  padding: 15px;
+  border: 1px solid #ddd;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+  min-width: 500px; /* 确保菜单宽度足够容纳三列 */
+}
+
+.dropdown-menu .col-md-4 {
+  padding: 5px;
+  border-right: 1px solid #ddd;
+}
+
+/* 去除每列右边框，最后一列 */
+.dropdown-menu .col-md-4:last-child {
+  border-right: none;
+}
+
+/* 每列标题的样式 */
+.dropdown-menu h4 {
+  text-align: center;
+  margin-bottom: 15px;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+/* 列表项样式 */
+.dropdown-menu ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.dropdown-menu ul li {
+  padding: 5px 0;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+/* 悬停效果 */
+.dropdown-menu ul li:hover {
+  background-color: #f8f8f8;
+  border-radius: 5px;
+  padding: 5px;
+}
+
+/* 调整下拉菜单的字体大小 */
+.dropdown-menu ul li {
+  font-size: 0.8rem; /* 使菜单项的字体变小 */
+}
+
+/* 调整标题（如 Dog, Cat, Bird）的字体大小 */
+.dropdown-menu h4 {
+  font-size: 1rem; /* 使标题变小 */
+}
+
+
+/* 主菜单样式 */
+.dropdown-menu {
+  position: relative; /* 为伪元素定位 */
+  color: #000; /* 确保文字颜色为黑色 */
+  height: 300px; /* 设置元素高度 */
+  width: 100%; /* 设置元素宽度 */
+}
+
+/* 添加伪元素实现半透明背景 */
+.dropdown-menu::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url('menu.jpg');
+  background-size: cover;
+  background-position: center;
+  opacity: 0.5; /* 使背景图片半透明 */
+  z-index: -1; /* 让伪元素在文字后面 */
+  border-radius: inherit; /* 如果有圆角，继承父元素 */
+}
