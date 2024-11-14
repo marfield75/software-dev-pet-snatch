@@ -129,6 +129,10 @@ app.get('/home', async (req, res) => {
         });
 });
 
+app.get('/search', (req, res) => {
+    res.render('pages/search')
+});
+
 app.get('/profile', async (req, res) => {
     try {
         const userId = req.session.user.id; // Get the user ID from the session
