@@ -10,12 +10,15 @@
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    /* flex-direction: column; */
+    padding: 20px; /* Add padding to avoid content touching the edges */
 }
+
 h2 {
     text-align: center;
     color: #d6c7c7;
+    grid-column: span 2; /* 让 h2 跨越两列 */
 }
+
 label {
     margin-top: 10px;
     display: block;
@@ -26,8 +29,7 @@ label {
 
 input[type="text"],
 input[type="date"],
-input[type="number"]
- {
+input[type="number"] {
     width: 100%;
     padding: 8px;
     margin-top: 5px;
@@ -35,6 +37,7 @@ input[type="number"]
     border: 1px solid #ccc;
     border-radius: 4px;
 }
+
 button {
     width: 100%;
     padding: 10px;
@@ -44,6 +47,7 @@ button {
     border-radius: 4px;
     cursor: pointer;
 }
+
 button:hover {
     background-color: #218838;
 }
