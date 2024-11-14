@@ -1,0 +1,20 @@
+
+
+<!-- 导航栏 -->
+<nav class="navbar">
+  <button class="search-btn" onclick="toggleSearchBar()">Search</button>
+</nav>
+
+<!-- 搜索栏 -->
+<div id="searchbody" class="search-bar hidden">
+  <form action="/search" method="get" class="search-form">
+    <input type="text" name="breed" class="search-input" placeholder="Pet Breed" />
+    <input type="text" name="color" class="search-input" placeholder="Pet Color" />
+    <input type="number" name="age" class="search-input" placeholder="Pet Age" min="0" />
+    <button type="submit" class="search-submit">🔍</button>
+  </form>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

@@ -117,6 +117,10 @@ app.get('/profile', (req, res) => {
     res.render('pages/profile')
 });
 
+app.get('/search', (req, res) => {
+    res.render('pages/search')
+});
+
 // POST route for handling registration form submission
 app.post('/register', async (req, res) => {
     const { 'first-name': firstName, 'last-name': lastName, email, username, password } = req.body;
