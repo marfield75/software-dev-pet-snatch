@@ -36,7 +36,7 @@ const dbConfig = {
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-       cb(null, path.join(__dirname, 'src/resources/img/')); // Save to the specified folder
+       cb(null, path.join(__dirname, '../src/resources/img/')); // Save to the specified folder
     },
     filename: (req, file, cb) => {
         cb(null, Date.now() + path.extname(file.originalname)); // Unique filename using current timestamp
@@ -191,7 +191,7 @@ app.post('/register', async (req, res) => {
     }
 });
 
-app.post('/register2', upload.single('Image'), async (req, res) => {
+app.post('/register2', upload.single('petImage'), async (req, res) => {
     console.log('Received pet registration data:', req.body); // Log the request body
     const { petName, petClass, petAge, petColor,  petWeight, petBreed, petEyecolor, petBirthday, petBio, petLoc } = req.body;
     const petImage = req.file.filename;
@@ -201,8 +201,7 @@ app.post('/register2', upload.single('Image'), async (req, res) => {
     }
 
     try {
-        console.log(petImage);
-        const imageUrl = `src/resources/img/${petImage}`;
+        const imageUrl = `../src/resources/img/${petImage}`;
         const query = `
             INSERT INTO pets (name, class, breed, age, color, weight, birthday, eye_color, location, bio, image_url)
             VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11);
