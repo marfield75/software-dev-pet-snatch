@@ -254,6 +254,17 @@ app.post('/login', async (req, res) => {
     }
 });
 
+app.get('/pet', async (req, res) => {
+    const query = 'SELECT * FROM pets LIMIT 1;';
+    db.any(query)
+        .then(data => {
+            res.render('pages/pet', { pet: data[0] });
+        })
+        .catch(err => {
+            console.log(err);
+            res.redirect('/home');
+        });
+});
 
 const auth = (req, res, next) => {
     if (!req.session.user) {
@@ -266,18 +277,6 @@ const auth = (req, res, next) => {
 
 // Authentication Required
 app.use(auth);
-
-app.get('/pet', async (req, res) => {
-    const query = 'SELECT * FROM pets;';
-    db.any(query)
-        .then(data => {
-            res.render('pages/pet', { pets: data });
-        })
-        .catch(err => {
-            console.log(err);
-            res.redirect('/home');
-        });
-});
 
 // *****************************************************
 // <!-- Section 5 : Start Server-->
