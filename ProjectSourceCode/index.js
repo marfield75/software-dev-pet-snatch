@@ -115,20 +115,19 @@ app.get('/home', (req, res) => {
 
 //render profile page
 app.get('/profile', async (req, res) => {
-    try {
+    res.render('pages/profile')
+    /*try {
         const username = req.user.username;
         const userData = await getUserData(username);
 
         res.render('profile', { user: userData });
     } catch (error) {
         res.status(500).send('Error retrieving profile information');
-    }
+    }*/
 });
 
 app.get('/editProfile', (req, res) => {
-    res.render('editProfile', {
-        user: req.user 
-    });
+    res.render('editProfile')
 });
 //get username for profile page
 async function getUserData(username) {
