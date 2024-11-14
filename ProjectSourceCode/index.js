@@ -206,7 +206,7 @@ app.post('/register', async (req, res) => {
     const { 'first-name': firstName, 'last-name': lastName, email, username, password } = req.body;
 
     if (!firstName || !lastName || !email || !username || !password) {
-        return res.render('pages/register', { error: 'All fields are required.' });
+        return res.status(400).render('pages/register', { error: 'All fields are required.' });
     }
 
     // Log the request body (excluding the password for security)
@@ -225,13 +225,13 @@ app.post('/register', async (req, res) => {
     } catch (err) {
         if (err.constraint === 'users_username_key') {
             console.error('Username already exists.');
-            res.render('pages/register', { error: 'Username already taken.' });
+            res.status(400).render('pages/register', { error: 'Username already taken.' });
         } else if (err.constraint === 'users_email_key') {
             console.error('Email already exists.');
-            res.render('pages/register', { error: 'Email already registered.' });
+            res.status(400).render('pages/register', { error: 'Email already registered.' });
         } else {
             console.error('Error during registration:', err);
-            res.render('pages/register', { error: 'Registration failed. Please try again.' });
+            res.status(500).render('pages/register', { error: 'Registration failed. Please try again.' });
         }
     }
 });
@@ -299,6 +299,17 @@ app.post('/login', async (req, res) => {
     }
 });
 
+app.get('/pet', async (req, res) => {
+    const query = 'SELECT * FROM pets LIMIT 1;';
+    db.any(query)
+        .then(data => {
+            res.render('pages/pet', { pet: data[0] });
+        })
+        .catch(err => {
+            console.log(err);
+            res.redirect('/home');
+        });
+});
 
 const auth = (req, res, next) => {
     if (!req.session.user) {
@@ -311,18 +322,6 @@ const auth = (req, res, next) => {
 
 // Authentication Required
 app.use(auth);
-
-app.get('/pet', async (req, res) => {
-    const query = 'SELECT * FROM pets;';
-    db.any(query)
-        .then(data => {
-            res.render('pages/pet', { pets: data });
-        })
-        .catch(err => {
-            console.log(err);
-            res.redirect('/home');
-        });
-});
 
 // *****************************************************
 // <!-- Section 5 : Start Server-->

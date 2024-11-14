@@ -1,8 +1,9 @@
 <div id="g2body">
-    <div class="register-container" >
+    <div class="register-container">
         <h2 style="text-align: center;">Pet's Information</h2>
         <form id="petInformationForm" action="/register2" method="POST" enctype="multipart/form-data">
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+            <!-- Container for form fields with three columns -->
+            <div class="form-grid">
                 <!-- Pet Name -->
                 <div>
                     <label for="pet-Name">Pet's Name</label>
@@ -76,3 +77,15 @@
         </form>
     </div>
 </div>
+
+<style>
+    .form-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr); /* Three columns */
+        gap: 10px;
+    }
+
+    .form-grid div {
+        width: 100%;
+    }
+</style>
