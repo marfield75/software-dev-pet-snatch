@@ -116,40 +116,85 @@ app.get('/home', (req, res) => {
     res.render('pages/home');
 });
 
-//render profile page
 app.get('/profile', async (req, res) => {
-    res.render('pages/profile')
-    /*try {
-        const username = req.user.username;
-        const userData = await getUserData(username);
-
-        res.render('profile', { user: userData });
-    } catch (error) {
-        res.status(500).send('Error retrieving profile information');
-    }*/
-});
-
-app.get('/editProfile', (req, res) => {
-    res.render('pages/editProfile')
-});
-//get username for profile page
-async function getUserData(username) {
     try {
-        // Define the query to select user data by username
-        const query = `
-            SELECT username, first_name, last_name, email
-            FROM users
-            WHERE username = $1
-        `;
-
-        // Execute the query and store the result
-        const userData = await db.oneOrNone(query, [username]);
+        const userId = req.session.user.id; // Get the user ID from the session
+        const userData = await getUserData(userId); // Fetch user data using user ID
 
         if (!userData) {
+            return res.status(404).send('User not found');
+        }
+
+        // Render the profile page with user data
+        res.render('pages/profile', { user: userData });
+    } catch (error) {
+        console.error('Error retrieving profile information:', error);
+        res.status(500).send('Error retrieving profile information');
+    }
+});
+
+app.get('/editProfile', async (req, res) => {
+    try {
+        const userId = req.session.user.id; // Get the user ID from the session
+        const userData = await getUserData(userId); // Fetch user data using user ID
+
+        if (!userData) {
+            return res.status(404).send('User not found');
+        }
+
+        // Render the edit profile page with user data
+        res.render('pages/editProfile', { user: userData });
+    } catch (error) {
+        console.error('Error retrieving edit profile information:', error);
+        res.status(500).send('Error retrieving edit profile information');
+    }
+});
+
+async function getUserData(userId) {
+    try {
+        // Query to fetch user information along with their pets based on user ID
+        const query = `
+            SELECT u.username, u.first_name, u.last_name, u.email,
+                   p.id AS pet_id, p.name AS pet_name, p.class, p.breed, p.age, p.color,
+                   p.weight, p.birthday, p.eye_color, p.location, p.bio, p.image_url
+            FROM users u
+            LEFT JOIN users_to_pets up ON u.id = up.user_id
+            LEFT JOIN pets p ON up.pet_id = p.id
+            WHERE u.id = $1
+        `;
+
+        // Execute the query with userId
+        const result = await db.any(query, [userId]);
+
+        if (result.length === 0) {
             throw new Error('User not found');
         }
 
-        return userData;
+        // Build the user object based on query result
+        const user = {
+            username: result[0].username,
+            first_name: result[0].first_name,
+            last_name: result[0].last_name,
+            email: result[0].email,
+            pets: result
+                .filter(row => row.pet_id) // Only include rows with pet data
+                .map(pet => ({
+                    id: pet.pet_id,
+                    name: pet.pet_name,
+                    class: pet.class,
+                    breed: pet.breed,
+                    age: pet.age,
+                    color: pet.color,
+                    weight: pet.weight,
+                    birthday: pet.birthday,
+                    eye_color: pet.eye_color,
+                    location: pet.location,
+                    bio: pet.bio,
+                    image_url: pet.image_url
+                }))
+        };
+
+        return user;
     } catch (error) {
         console.error('Error fetching user data:', error);
         throw error;
