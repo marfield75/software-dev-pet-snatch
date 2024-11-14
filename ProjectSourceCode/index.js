@@ -161,7 +161,7 @@ app.post('/register', async (req, res) => {
     const { 'first-name': firstName, 'last-name': lastName, email, username, password } = req.body;
 
     if (!firstName || !lastName || !email || !username || !password) {
-        return res.render('pages/register', { error: 'All fields are required.' });
+        return res.status(400).render('pages/register', { error: 'All fields are required.' });
     }
 
     // Log the request body (excluding the password for security)
@@ -180,13 +180,13 @@ app.post('/register', async (req, res) => {
     } catch (err) {
         if (err.constraint === 'users_username_key') {
             console.error('Username already exists.');
-            res.render('pages/register', { error: 'Username already taken.' });
+            res.status(400).render('pages/register', { error: 'Username already taken.' });
         } else if (err.constraint === 'users_email_key') {
             console.error('Email already exists.');
-            res.render('pages/register', { error: 'Email already registered.' });
+            res.status(400).render('pages/register', { error: 'Email already registered.' });
         } else {
             console.error('Error during registration:', err);
-            res.render('pages/register', { error: 'Registration failed. Please try again.' });
+            res.status(500).render('pages/register', { error: 'Registration failed. Please try again.' });
         }
     }
 });
