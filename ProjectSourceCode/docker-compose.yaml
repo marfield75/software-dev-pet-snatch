@@ -21,7 +21,7 @@ services:
       - '3000:3000'
     volumes:
       - ./:/repository
-      - ./src/resources/imgs/img:/app/src/resources/img
+      - ./src/resources/img:/repository/src/resources/img
     command: 'npm run testandrun' #TODO: change the command to `npm run testandrun` to run mocha
 volumes:
   group-project:
