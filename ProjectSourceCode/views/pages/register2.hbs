@@ -1,28 +1,77 @@
-   <div id="g2body">
-    <div class="register-container">
-        <h2>Pet's information</h2>
-        <form id="petInformationForm" action="/register2" method="POST">
-            <label for="pet-Name">Pet's Name</label>
-            <input type="text" id="pet-Name" name="pet-Name" required>
+<div id="g2body">
+    <div class="register-container" style="max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ccc; border-radius: 10px;">
+        <h2 style="text-align: center;">Pet's Information</h2>
+        <form id="petInformationForm" action="/register2" method="POST" enctype="multipart/form-data">
+            <div style="display: flex; flex-wrap: wrap; gap: 15px;">
+                <!-- Pet Name -->
+                <div style="flex: 1; min-width: 250px;">
+                    <label for="pet-Name">Pet's Name</label>
+                    <input type="text" id="pet-Name" name="petName" required style="width: 100%;">
+                </div>
 
-            <label for="pet-class">Pet's Class</label>
-            <input type="text" id="pet-class" name="pet-class" required>
-            
-            <label for="pet-breed">Pet's Breed</label>
-            <input type="text" id="pet-breed" name="pet-breed" required>
+                <!-- Pet Class -->
+                <div style="flex: 1; min-width: 250px;">
+                    <label for="pet-class">Pet's Class</label>
+                    <input type="text" id="pet-class" name="petClass" required style="width: 100%;">
+                </div>
 
-            <label for="eye-color">Eye Color</label>
-            <input type="text" id="eye-color" name="eye-color" required>
+                <!-- Pet age -->
+                <div style="flex: 1; min-width: 250px;">
+                    <label for="pet-class">Pet's age</label>
+                    <input type="number" id="pet-class" name="petClass" required style="width: 100%;">
+                
+                 <!-- Pet Color -->
+                <div style="flex: 1; min-width: 250px;">
+                    <label for="pet-class">Pet's Color</label>
+                    <input type="text" id="pet-class" name="petClass" required style="width: 100%;">
+                </div>
 
-            <label for="birth">Birthday</label>
-            <input type="text" id="birth" name="birth" required>
+                <!-- Pet Weigit -->
+                <div style="flex: 1; min-width: 250px;">
+                    <label for="pet-class">Pet's Weight</label>
+                    <input type="number" id="pet-class" name="petClass" required style="width: 100%;">
+                </div>
 
-            <label for="location">Location</label>
-            <input type="text" id="Location" name="Location" required>
+                <!-- Pet Breed -->
+                <div style="flex: 1; min-width: 250px;">
+                    <label for="pet-breed">Pet's Breed</label>
+                    <input type="text" id="pet-breed" name="petBreed" required style="width: 100%;">
+                </div>
 
-            <button type="submit">continue</button>
+                <!-- Eye Color -->
+                <div style="flex: 1; min-width: 250px;">
+                    <label for="eye-color">Eye Color</label>
+                    <input type="text" id="eye-color" name="eyeColor" required style="width: 100%;">
+                </div>
+
+                <!-- Birthday -->
+                <div style="flex: 1; min-width: 250px;">
+                    <label for="birth">Birthday</label>
+                    <input type="date" id="birth" name="birth" required style="width: 100%;">
+                </div>
+
+                <!-- Pet Bio -->
+                <div style="flex: 1; min-width: 250px;">
+                    <label for="pet-class">Pet's Bio</label>
+                    <input type="text" id="pet-class" name="petClass" required style="width: 100%;">
+                </div>
+
+                <!-- Location -->
+                <div style="flex: 1; min-width: 250px;">
+                    <label for="location">Location</label>
+                    <input type="text" id="location" name="location" required style="width: 100%;">
+                </div>
+
+                <!-- Pet Image Upload -->
+                <div style="flex: 1; min-width: 250px;">
+                    <label for="pet-image">Upload Pet's Image</label>
+                    <input type="file" id="pet-image" name="petImage" required style="width: 100%;">
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 20px;">
+                <button type="submit" style="padding: 10px 20px;">Continue</button>
+            </div>
         </form>
     </div>
 </div>
-
-</body>
