@@ -1,0 +1,5 @@
+A user should be able to visit a pet page while being signed in
+
+A user can only register a pet when signed in
+
+A user can add pets to their favorites list only when signed in
