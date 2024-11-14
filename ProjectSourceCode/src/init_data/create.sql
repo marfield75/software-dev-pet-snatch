@@ -1,9 +1,8 @@
 CREATE TABLE users(
-    id SERIAL PRIMARY KEY,
+    id SERIAL PRIMARY KEY UNIQUE,
     username text,
     first_name text, 
     last_name text,
-    password text,
     password_hash text,
     email text
 );
@@ -19,10 +18,13 @@ CREATE TABLE pets(
     birthday DATE, 
     eye_color text,
     location text,
-    bio text   
+    bio text,
+    image_url text
 );
 
 CREATE TABLE users_to_pets(
     user_id SMALLINT,
     pet_id SMALLINT
 );
+
+

@@ -12,3 +12,12 @@ ii. Alternative actions/options discussed: Docker help at office hours
 iii. Follow-up items, including agreed-on roles and responsibilities: David works on 
     partials, Pradyumna creates tables for database, Addie profile page, Matthew
     home page, Nora pet profile page, Rita register and login pages, API routes next
+
+Monday 11/11 TA Meeting
+i. Decisions made: When working on API route, make sure to be in sync for merging
+    sequence
+ii. Alternative actions/options discussed: Password hashing method
+iii. Follow-up items, including agreed-on roles and responsibilities: David nav bar 
+    and search, Rita payment API route, Pradyumna password hash, Matthew home page
+    and API route for creating cards, Nora cart page outline and pet profile API
+    routes, Addie profile page with separate page for edits

@@ -21,6 +21,8 @@ services:
       - '3000:3000'
     volumes:
       - ./:/home/node/app
+      - ./src/resources/imgs/img:/app/src/resources/img
+
     command: 'npm start'
 volumes:
   group-project:

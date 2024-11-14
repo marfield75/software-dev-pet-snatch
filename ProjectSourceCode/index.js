@@ -12,7 +12,7 @@ const bodyParser = require('body-parser');
 const session = require('express-session'); // To set the session object. To store or access session data, use the `req.session`, which is (generally) serialized as JSON by the store.
 const bcrypt = require('bcryptjs'); //  To hash passwords
 const axios = require('axios'); // To make HTTP requests from our server. We'll learn more about it in Part C.
-
+const multer = require('multer');
 
 // *****************************************************
 // <!-- Section 2 : Connect to DB -->
@@ -33,6 +33,17 @@ const dbConfig = {
     user: process.env.POSTGRES_USER, // the user account to connect with
     password: process.env.POSTGRES_PASSWORD, // the password of the user account
 };
+
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, path.join(__dirname, '../../src/resources/img/')); // Save to the specified folder
+    },
+    filename: (req, file, cb) => {
+        cb(null, Date.now() + path.extname(file.originalname)); // Unique filename using current timestamp
+    }
+});
+
+const upload = multer({ storage: storage });
 
 const db = pgp(dbConfig);
 
@@ -108,20 +119,24 @@ app.get('/profile', (req, res) => {
 
 // POST route for handling registration form submission
 app.post('/register', async (req, res) => {
-    console.log('Received registration data:', req.body); // Log the request body
     const { 'first-name': firstName, 'last-name': lastName, email, username, password } = req.body;
 
     if (!firstName || !lastName || !email || !username || !password) {
         return res.render('pages/register', { error: 'All fields are required.' });
     }
 
+    // Log the request body (excluding the password for security)
+    const safeBody = { ...req.body };
+    delete safeBody.password;
+    console.log('Received registration data:', safeBody);
+
     try {
         const hashedPassword = await bcrypt.hash(password, 10);
         const query = `
-            INSERT INTO users (first_name, last_name, email, username, password) 
-            VALUES ($1, $2, $3, $4, $5) RETURNING id;
+            INSERT INTO users (username, first_name, last_name, password_hash, email) 
+            VALUES ($1, $2, $3, $4, $5);
         `;
-        const newUser = await db.one(query, [firstName, lastName, email, username, hashedPassword]);
+        const newUser = await db.none(query, [username, firstName, lastName, hashedPassword, email]);
         res.redirect('/login');
     } catch (err) {
         if (err.constraint === 'users_username_key') {
@@ -137,20 +152,21 @@ app.post('/register', async (req, res) => {
     }
 });
 
-app.post('/register2', async (req, res) => {
+app.post('/register2', upload.single('petImage'), async (req, res) => {
     console.log('Received pet registration data:', req.body); // Log the request body
     const { petName, petType, petAge, ownerId } = req.body;
+    const petImage = req.file ? req.file.filename : null; // Get the filename if an image is uploaded
 
-    if (!petName || !petType || !petAge || !ownerId) {
+    if (!petName || !petType || !petAge || !ownerId || !petImage) {
         return res.render('pages/register2', { error: 'All fields are required.' });
     }
 
     try {
         const query = `
-            INSERT INTO pets (name, type, age, owner_id) 
-            VALUES ($1, $2, $3, $4) RETURNING id;
+            INSERT INTO pets (name, type, age, owner_id, image_url) 
+            VALUES ($1, $2, $3, $4, $5) RETURNING id;
         `;
-        const newPet = await db.one(query, [petName, petType, petAge, ownerId]);
+        const newPet = await db.none(query, [petName, petType, petAge, ownerId, petImage]);
         res.redirect('/profile');
     } catch (err) {
         console.error('Error during pet registration:', err);
@@ -158,12 +174,13 @@ app.post('/register2', async (req, res) => {
     }
 });
 
-
 app.post('/login', async (req, res) => {
     const { username, password } = req.body;
 
-    // Log the incoming request body
-    console.log('Login request body:', req.body);
+    // Log the incoming request body (excluding the password for security)
+    const safeBody = { ...req.body };
+    delete safeBody.password;
+    console.log('Login request body:', safeBody);
 
     try {
         const query = 'SELECT * FROM users WHERE username = $1';
@@ -177,7 +194,7 @@ app.post('/login', async (req, res) => {
         // Log found user details (excluding password for security)
         console.log('User found:', { id: user.id, username: user.username });
 
-        const match = await bcrypt.compare(password, user.password);
+        const match = await bcrypt.compare(password, user.password_hash);
 
         if (!match) {
             console.log('Password does not match for user:', username);
