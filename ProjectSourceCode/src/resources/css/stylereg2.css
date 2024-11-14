@@ -6,22 +6,27 @@
     margin: 0;
     font-family: Arial, sans-serif;
     background-color: #f4f4f4;
-    background-image: url('IMG_8894.jpg'); /* 添加图像背景 */
-  background-size: cover; /* 使图片覆盖整个页面 */
-  background-position: center; /* 图片居中 */
-  background-repeat: no-repeat; 
+    background-image: url('IMG_8894.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    /* flex-direction: column; */
 }
-
 h2 {
     text-align: center;
-    color: #333;
+    color: #d6c7c7;
 }
 label {
     margin-top: 10px;
     display: block;
     font-weight: bold;
+    font-size: 16px; 
+    line-height: 1.5; 
 }
-input[type="text"]
+
+input[type="text"],
+input[type="date"],
+input[type="number"]
  {
     width: 100%;
     padding: 8px;
