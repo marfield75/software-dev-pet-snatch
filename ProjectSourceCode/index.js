@@ -13,6 +13,8 @@ const session = require('express-session'); // To set the session object. To sto
 const bcrypt = require('bcryptjs'); //  To hash passwords
 const axios = require('axios'); // To make HTTP requests from our server. We'll learn more about it in Part C.
 const multer = require('multer');
+const fs = require('fs');
+
 
 // *****************************************************
 // <!-- Section 2 : Connect to DB -->
@@ -36,10 +38,12 @@ const dbConfig = {
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, path.join(__dirname, '../../src/resources/img/')); // Save to the specified folder
+        const dir = path.join(__dirname, '../../src/resources/img/');
+        fs.mkdirSync(dir, { recursive: true });
+        cb(null, dir);
     },
     filename: (req, file, cb) => {
-        cb(null, Date.now() + path.extname(file.originalname)); // Unique filename using current timestamp
+        cb(null, Date.now() + path.extname(file.originalname));
     }
 });
 
@@ -87,8 +91,8 @@ app.use(
 // <!-- Section 4 : API Routes -->
 // *****************************************************
 app.get('/welcome', (req, res) => {
-    res.json({status: 'success', message: 'Welcome!'});
-  });
+    res.json({ status: 'success', message: 'Welcome!' });
+});
 
 app.get('/', (req, res) => {
     res.redirect('/home');
@@ -240,7 +244,7 @@ app.post('/register2', upload.single('petImage'), async (req, res) => {
     console.log('Received pet registration data:', req.body); // Log the request body
     const { petName, petType, petAge, ownerId } = req.body;
     const petImage = req.file ? req.file.filename : null; // Get the filename if an image is uploaded
-
+    console.log('req.file.filename:', req.file.filename);
     if (!petName || !petType || !petAge || !ownerId || !petImage) {
         return res.render('pages/register2', { error: 'All fields are required.' });
     }
