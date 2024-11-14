@@ -1,5 +1,5 @@
-1. A user should be able to visit a pet page while being signed in, and they should still be signed in while interacting with said pet page. Ex: Staying signed in while liking a pet photo.
+1. A user should be able to visit a pet page while being signed in, and they should still be signed in while interacting with said pet page. Ex: Staying signed in while liking a pet photo. This will be tested on localhost using Chai.
 
-2. A user can only register a pet when signed in, including all the features when adding a pet, such as its attributes. Ex: Someone logged out shouldn't be able to register a pet, they should be redirected to the login page.
+2. A user can only register a pet when signed in, including all the features when adding a pet, such as its attributes. Ex: Someone logged out shouldn't be able to register a pet, they should be redirected to the login page. This will be tested on localhost using Chai.
 
-3. A user can add pets to their favorites list only when signed in, and when they sign out, the favorites list should be saved somewhere, so that when they sign back in the information is saved. Ex: Someone adds a couple of pets to their favorites list, then logs out and when they log back in later, they should still have their favorites list, untouched.
+3. A user can add pets to their favorites list only when signed in, and when they sign out, the favorites list should be saved somewhere, so that when they sign back in the information is saved. Ex: Someone adds a couple of pets to their favorites list, then logs out and when they log back in later, they should still have their favorites list, untouched. This will be tested on localhost using Chai.
