@@ -303,7 +303,11 @@ app.get('/pet', async (req, res) => {
     const query = 'SELECT * FROM pets LIMIT 1;';
     db.any(query)
         .then(data => {
-            res.render('pages/pet', { pet: data[0] });
+            const user_query = 'SELECT u.* FROM users u JOIN users_to_pets utp ON u.id = utp.user_id WHERE utp.pet_id = $1 LIMIT 1;';
+            const petUser = db.any(user_query, [data[0].id]);
+            //const petUser = getUserData(data[0].id);
+            //console.log(petUser.username);
+            res.render('pages/pet', { pet: data[0], user: petUser });
         })
         .catch(err => {
             console.log(err);
