@@ -1,7 +1,39 @@
 .lavender-navbar {
-    background-color: lavender !important;
+    background-color: rgb(247, 247, 251) !important;
   }
   
   .lavender-navbar .nav-link {
     color: #333 !important; /* Adjust as needed for contrast */
   }
+
+  .navbar .container {
+    max-width: 100%; /* 铺满页面宽度 */
+  }
+  
+  .navbar {
+    height: 80px; /* 自定义固定高度 */
+  }
+  
+  .navbar-center {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    align-items: center;
+  }
+  
+  .center-image {
+    height: 50px; /* 图片大小可以根据需求调整 */
+    margin-right: 10px; /* 图片和文字之间的间距 */
+  }
+  
+  .center-text {
+    font-family: 'Dancing Script', cursive; /* 花体字体 */
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #333; /* 文字颜色 */
+  }
+  
+  
