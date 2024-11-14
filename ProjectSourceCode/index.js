@@ -86,6 +86,9 @@ app.use(
 // *****************************************************
 // <!-- Section 4 : API Routes -->
 // *****************************************************
+app.get('/welcome', (req, res) => {
+    res.json({status: 'success', message: 'Welcome!'});
+  });
 
 app.get('/', (req, res) => {
     res.redirect('/home');
@@ -113,20 +116,97 @@ app.get('/home', (req, res) => {
     res.render('pages/home');
 });
 
-app.get('/profile', (req, res) => {
-    res.render('pages/profile')
+app.get('/profile', async (req, res) => {
+    try {
+        const userId = req.session.user.id; // Get the user ID from the session
+        const userData = await getUserData(userId); // Fetch user data using user ID
+
+        if (!userData) {
+            return res.status(404).send('User not found');
+        }
+
+        // Render the profile page with user data
+        res.render('pages/profile', { user: userData });
+    } catch (error) {
+        console.error('Error retrieving profile information:', error);
+        res.status(500).send('Error retrieving profile information');
+    }
 });
 
-app.get('/search', (req, res) => {
-    res.render('pages/search')
+app.get('/editProfile', async (req, res) => {
+    try {
+        const userId = req.session.user.id; // Get the user ID from the session
+        const userData = await getUserData(userId); // Fetch user data using user ID
+
+        if (!userData) {
+            return res.status(404).send('User not found');
+        }
+
+        // Render the edit profile page with user data
+        res.render('pages/editProfile', { user: userData });
+    } catch (error) {
+        console.error('Error retrieving edit profile information:', error);
+        res.status(500).send('Error retrieving edit profile information');
+    }
 });
+
+async function getUserData(userId) {
+    try {
+        // Query to fetch user information along with their pets based on user ID
+        const query = `
+            SELECT u.username, u.first_name, u.last_name, u.email,
+                   p.id AS pet_id, p.name AS pet_name, p.class, p.breed, p.age, p.color,
+                   p.weight, p.birthday, p.eye_color, p.location, p.bio, p.image_url
+            FROM users u
+            LEFT JOIN users_to_pets up ON u.id = up.user_id
+            LEFT JOIN pets p ON up.pet_id = p.id
+            WHERE u.id = $1
+        `;
+
+        // Execute the query with userId
+        const result = await db.any(query, [userId]);
+
+        if (result.length === 0) {
+            throw new Error('User not found');
+        }
+
+        // Build the user object based on query result
+        const user = {
+            username: result[0].username,
+            first_name: result[0].first_name,
+            last_name: result[0].last_name,
+            email: result[0].email,
+            pets: result
+                .filter(row => row.pet_id) // Only include rows with pet data
+                .map(pet => ({
+                    id: pet.pet_id,
+                    name: pet.pet_name,
+                    class: pet.class,
+                    breed: pet.breed,
+                    age: pet.age,
+                    color: pet.color,
+                    weight: pet.weight,
+                    birthday: pet.birthday,
+                    eye_color: pet.eye_color,
+                    location: pet.location,
+                    bio: pet.bio,
+                    image_url: pet.image_url
+                }))
+        };
+
+        return user;
+    } catch (error) {
+        console.error('Error fetching user data:', error);
+        throw error;
+    }
+}
 
 // POST route for handling registration form submission
 app.post('/register', async (req, res) => {
     const { 'first-name': firstName, 'last-name': lastName, email, username, password } = req.body;
 
     if (!firstName || !lastName || !email || !username || !password) {
-        return res.render('pages/register', { error: 'All fields are required.' });
+        return res.status(400).render('pages/register', { error: 'All fields are required.' });
     }
 
     // Log the request body (excluding the password for security)
@@ -145,13 +225,13 @@ app.post('/register', async (req, res) => {
     } catch (err) {
         if (err.constraint === 'users_username_key') {
             console.error('Username already exists.');
-            res.render('pages/register', { error: 'Username already taken.' });
+            res.status(400).render('pages/register', { error: 'Username already taken.' });
         } else if (err.constraint === 'users_email_key') {
             console.error('Email already exists.');
-            res.render('pages/register', { error: 'Email already registered.' });
+            res.status(400).render('pages/register', { error: 'Email already registered.' });
         } else {
             console.error('Error during registration:', err);
-            res.render('pages/register', { error: 'Registration failed. Please try again.' });
+            res.status(500).render('pages/register', { error: 'Registration failed. Please try again.' });
         }
     }
 });
@@ -219,6 +299,17 @@ app.post('/login', async (req, res) => {
     }
 });
 
+app.get('/pet', async (req, res) => {
+    const query = 'SELECT * FROM pets LIMIT 1;';
+    db.any(query)
+        .then(data => {
+            res.render('pages/pet', { pet: data[0] });
+        })
+        .catch(err => {
+            console.log(err);
+            res.redirect('/home');
+        });
+});
 
 const auth = (req, res, next) => {
     if (!req.session.user) {
@@ -232,21 +323,9 @@ const auth = (req, res, next) => {
 // Authentication Required
 app.use(auth);
 
-app.get('/pet', async (req, res) => {
-    const query = 'SELECT * FROM pets;';
-    db.any(query)
-        .then(data => {
-            res.render('pages/pet', { pets: data });
-        })
-        .catch(err => {
-            console.log(err);
-            res.redirect('/home');
-        });
-});
-
 // *****************************************************
 // <!-- Section 5 : Start Server-->
 // *****************************************************
 // starting the server and keeping the connection open to listen for more requests
-app.listen(3000);
+module.exports = app.listen(3000);
 console.log('Server is listening on port 3000');

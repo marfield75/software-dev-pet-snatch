@@ -1,30 +1,41 @@
-<div id="user-profile">
-    <h2 class="text-center">User Profile</h2>
-    
-    <!-- Profile Picture (Editable) -->
-    <div class="profile-image">
-        <img src="{{profilePicture}}" alt="Profile Picture" id="profile-pic">
-        <input type="file" id="profile-pic-upload" style="display: none;" onchange="previewProfilePic()">
-        <button onclick="document.getElementById('profile-pic-upload').click()">Change Profile Picture</button>
-    </div>
-    
-    <!-- Username (Editable) -->
-    <div class="profile-field">
-        <p><strong>Username:</strong></p>
-        <input type="text" id="username" value="{{username}}" readonly onclick="editField('username')">
-        <button onclick="editField('username')">Edit</button>
-    </div>
-    
-    <!-- Bio (Editable) -->
-    <div class="profile-field">
-        <p><strong>Bio:</strong></p>
-        <textarea id="bio" readonly onclick="editField('bio')">{{bio}}</textarea>
-        <button onclick="editField('bio')">Edit</button>
+<!-- profile.hbs -->
+<div class="container mt-5">
+    <!-- Profile Header -->
+    <div class="profile-header">
+        <h1>Welcome, {{user.first_name}} {{user.last_name}}</h1>
+        <p><strong>Username:</strong> {{user.username}}</p>
+        <p><strong>Email:</strong> {{user.email}}</p>
+        <a href="/register2" class="btn btn-primary mt-2">Add Pet</a>
+        <a href="/editProfile" class="btn btn-primary mt-2">Edit Profile</a>
     </div>
 
-    <!-- Save and Cancel buttons -->
-    <div class="profile-actions">
-        <button onclick="saveProfile()">Save Changes</button>
-        <button onclick="cancelEdit()">Cancel</button>
+    <!-- User's Pets Section -->
+    <h2 class="mt-5">Your Pets</h2>
+    <div class="row">
+        {{#if user.pets.length}}
+            {{#each user.pets}}
+                <div class="col-md-4 pet-card">
+                    <div class="card">
+                        <!-- Pet Image -->
+                        <img src="{{this.image_url}}" class="card-img-top" alt="{{this.name}}" onerror="this.src='https://via.placeholder.com/150';" />
+                        <div class="card-body">
+                            <!-- Pet Info -->
+                            <h5 class="card-title">{{this.name}}</h5>
+                            <p class="card-text">
+                                <strong>Class:</strong> {{this.class}}<br>
+                                <strong>Breed:</strong> {{this.breed}}<br>
+                                <strong>Age:</strong> {{this.age}}<br>
+                                <strong>Color:</strong> {{this.color}}<br>
+                                <strong>Eye Color:</strong> {{this.eye_color}}<br>
+                                <strong>Location:</strong> {{this.location}}<br>
+                            </p>
+                            <p class="card-text"><small class="text-muted">{{this.bio}}</small></p>
+                        </div>
+                    </div>
+                </div>
+            {{/each}}
+        {{else}}
+            <p class="text-muted">No pets added yet.</p>
+        {{/if}}
     </div>
 </div>
