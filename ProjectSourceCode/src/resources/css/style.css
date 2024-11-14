@@ -115,10 +115,10 @@
 
 /* 主菜单样式 */
 .dropdown-menu {
-  position: relative; /* 为伪元素定位 */
-  color: #000; /* 确保文字颜色为黑色 */
-  height: 300px; /* 设置元素高度 */
-  width: 100%; /* 设置元素宽度 */
+  position: relative; 
+  color: #000; 
+  height: 300px; 
+  width: 100%; 
 }
 
 /* 添加伪元素实现半透明背景 */
@@ -132,7 +132,7 @@
   background-image: url('menu.jpg');
   background-size: cover;
   background-position: center;
-  opacity: 0.5; /* 使背景图片半透明 */
-  z-index: -1; /* 让伪元素在文字后面 */
-  border-radius: inherit; /* 如果有圆角，继承父元素 */
+  opacity: 0.5; 
+  z-index: -1; 
+  border-radius: inherit; 
 }
