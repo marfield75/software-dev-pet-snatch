@@ -251,10 +251,10 @@ app.post('/register', async (req, res) => {
 
 app.post('/register2', upload.single('petImage'), async (req, res) => {
     console.log('Received pet registration data:', req.body); // Log the request body
-    const { petName, petType, petAge, ownerId } = req.body;
+    const { petName, petClass, petAge, petColor, petWeight, petBreed, petEyecolor, petBirthday, petBio, petLoc } = req.body;
     const petImage = req.file ? req.file.filename : null; // Get the filename if an image is uploaded
     console.log('req.file.filename:', req.file.filename);
-    if (!petName || !petType || !petAge || !ownerId || !petImage) {
+    if (!petName || !petClass || !petAge || !petColor || !petWeight || !petBreed || !petEyecolor || !petBirthday || !petBio || !petLoc || !petImage) {
         return res.render('pages/register2', { error: 'All fields are required.' });
     }
 
