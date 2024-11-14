@@ -127,7 +127,7 @@ app.get('/profile', async (req, res) => {
 });
 
 app.get('/editProfile', (req, res) => {
-    res.render('editProfile')
+    res.render('pages/editProfile')
 });
 //get username for profile page
 async function getUserData(username) {
