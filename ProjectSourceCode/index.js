@@ -255,19 +255,19 @@ app.post('/register', async (req, res) => {
 
 app.post('/register2', upload.single('petImage'), async (req, res) => {
     console.log('Received pet registration data:', req.body); // Log the request body
-    const { petName, petClass, petAge, petColor, petWeight, petBreed, petEyecolor, petBirthday, petBio, petLoc } = req.body;
+    const { petName, petClass, petAge, petColor, petWeight, petBreed, petEyecolor, petBirthday, petBio, petLoc, petPrice } = req.body;
     const petImage = req.file ? req.file.filename : null; // Get the filename if an image is uploaded
     console.log('req.file.filename:', req.file.filename);
-    if (!petName || !petClass || !petAge || !petColor || !petWeight || !petBreed || !petEyecolor || !petBirthday || !petBio || !petLoc || !petImage) {
+    if (!petName || !petClass || !petAge || !petColor || !petWeight || !petBreed || !petEyecolor || !petBirthday || !petBio || !petLoc || !petPrice || !petImage) {
         return res.render('pages/register2', { error: 'All fields are required.' });
     }
 
     try {
         const query = `
-            INSERT INTO pets (name, type, age, owner_id, image_url) 
-            VALUES ($1, $2, $3, $4, $5) RETURNING id;
+            INSERT INTO pets (name, class, breed, age, color, weight, birthday, eye_color, location, bio, price, image_url) 
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) RETURNING id;
         `;
-        const newPet = await db.none(query, [petName, petType, petAge, ownerId, petImage]);
+        const newPet = await db.none(query, [petName, petClass, petBreed, petAge, petColor, petWeight, petBirthday, petEyecolor, petLoc, petBio, petPrice, petImage]);
         res.redirect('/profile');
     } catch (err) {
         console.error('Error during pet registration:', err);
