@@ -1,18 +1,19 @@
+{{!-- Cards that pull data from the database  --}}
 <div id="homebody">
     <div class="row">
         <div class="column">
+            {{#each data}}
             <div class="card">
                 <div class="container">
-                    {{!-- <div class="pet-info"> --}}
-                        {{!-- <img src="/img/{{pet.image_url}}" alt="{{pet.name}}" /> --}}
-                        {{#each data}}
+                    <div class="pet-info">
+                        <img src="/img/{{pet.image_url}}" alt="{{pet.name}}" />
                         <h3>Name: {{pet.name}}</h3>
                         <p>Class: {{pet.class}}</p>
                         <p>Age: {{pet.age}}</p>
-                        {{/each}}
-                    {{!-- </div> --}}
+                    </div>
                 </div>
             </div>
+            {{/each}}
         </div>
         <div class="column">
             <div class="card">
@@ -47,11 +48,3 @@
         integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
         crossorigin="anonymous"></script>
     </body>
-
-
-    {{!-- <div class="pet-info">
-        <h3>{{pet.name}}</h3>
-        <p>Type: {{pet.type}}</p>
-        <p>Age: {{pet.age}}</p>
-        <img src="/img/{{pet.image_url}}" alt="{{pet.name}}" />
-    </div> --}}
