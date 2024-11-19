@@ -150,6 +150,19 @@ app.get('/editProfile', async (req, res) => {
     }
 });
 
+app.post('/updateProfile', async (req, res) => {
+    const { username, password } = req.body;
+
+    try {
+        const passwordHash = await bcrypt.hash(password, 10);
+        await db.none('UPDATE users SET username = $1, password_hash = $2 WHERE id = $3', [username, passwordHash, req.user.id]);
+        res.json({ success: true });
+    } catch (error) {
+        console.error('Error updating profile:', error);
+        res.json({ success: false });
+    }
+});
+
 async function getUserData(userId) {
     try {
         // Query to fetch user information along with their pets based on user ID
