@@ -13,34 +13,85 @@
           <li class="nav-item">
             <a class="nav-link" href="/discover">Search</a>
           </li>
-           
-            <li class="nav-item mx-auto">
+
+          <!-- Search Dropdown -->
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Search
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="searchDropdown">
+              <div class="row">
+    <div class="col-md-4">
+      <h4>Dog</h4>
+      <ul>
+        <li>Tea Cup Dog</li>
+        <li>Golden Retriever</li>
+      </ul>
+    </div>
+    <div class="col-md-4">
+      <h4>Bird</h4>
+      <ul>
+        <li>Parrot</li>
+        <li>Canary</li>
+      </ul>
+    </div>
+    <div class="col-md-4">
+      <h4>Cat</h4>
+      <ul>
+        <li>Persian</li>
+        <li>Siamese</li>
+      </ul>
+    </div>
+  </div>
+            </ul>
+          </li>
+
+          <li class="nav-item mx-auto">
             <div class="navbar-center d-flex align-items-center">
               <span class="center-text">Pet -  </span>
               <img src="IMG_8981.jpg" alt="Center Image" class="center-image">
               <span class="center-text">- Snatch</span>
             </div>
           </li>
-      
+
         </ul>
         
-            {{#if loggedIn}}
-            <div class="nav-item me-3">
-            <a class="nav-link fw-bold" href="/favorites">Favorites</a>
-            </div>
-            <div class="nav-item me-3">
-            <a class="nav-link fw-bold" href="/logout">Logout</a>
-            </div>
-            {{else}}
-            <div class="nav-item me-3">
-            <a class="nav-link fw-bold" href="/register">Register</a>
-            </div>
-            <div class="nav-item me-3">
-            <a class="nav-link fw-bold" href="/login">Login</a>
-            </div>
-            {{/if}}
+        {{#if loggedIn}}
+        <div class="nav-item me-3">
+          <a class="nav-link fw-bold" href="/favorites">Favorites</a>
         </div>
+        <div class="nav-item me-3">
+          <a class="nav-link fw-bold" href="/logout">Logout</a>
+        </div>
+        {{else}}
+        <div class="nav-item me-3">
+          <a class="nav-link fw-bold" href="/register">Register</a>
+        </div>
+        <div class="nav-item me-3">
+          <a class="nav-link fw-bold" href="/login">Login</a>
+        </div>
+        {{/if}}
       </div>
     </div>
   </nav>
 </header>
+
+<!-- 品种菜单，初始时隐藏 -->
+<div id="catDetails" class="details-menu hidden">
+  <ul>
+    <li>Persian</li>
+    <li>Siamese</li>
+  </ul>
+</div>
+<div id="dogDetails" class="details-menu hidden">
+  <ul>
+    <li>Tea Cup Dog</li>
+    <li>Golden Retriever</li>
+  </ul>
+</div>
+<div id="birdDetails" class="details-menu hidden">
+  <ul>
+    <li>Parrot</li>
+    <li>Canary</li>
+  </ul>
+</div>

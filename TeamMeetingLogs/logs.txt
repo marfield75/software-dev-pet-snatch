@@ -18,6 +18,6 @@ i. Decisions made: When working on API route, make sure to be in sync for mergin
     sequence
 ii. Alternative actions/options discussed: Password hashing method
 iii. Follow-up items, including agreed-on roles and responsibilities: David nav bar 
-    and search, Rita payment API route, Pradyumna password hash, Matthew home page
+    and search, Rita payment API route,the menu bar, Pradyumna password hash, Matthew home page
     and API route for creating cards, Nora cart page outline and pet profile API
     routes, Addie profile page with separate page for edits
