@@ -117,11 +117,11 @@ app.get('/payment', (req, res) => {
 
 
 app.get('/home', async (req, res) => {
-    const query = 'SELECT * FROM pets LIMIT 1;';
+    const query = 'SELECT * FROM pets;';
     db.any(query)
         .then(data => {
             // still figuring out how to use each to display all cards
-            res.render('pages/home', { pet: data});
+            res.render('pages/home', { pet: data });
         })
         .catch(err => {
             console.log(err);
