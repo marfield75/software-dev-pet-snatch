@@ -175,7 +175,7 @@ async function getUserData(userId) {
                    p.id AS pet_id, p.name AS pet_name, p.class, p.breed, p.age, p.color,
                    p.weight, p.birthday, p.eye_color, p.location, p.bio, p.image_url
             FROM users u
-            LEFT JOIN user_uploads up ON u.id = up.user_id
+            LEFT JOIN users_to_pets up ON u.id = up.user_id
             LEFT JOIN pets p ON up.pet_id = p.id
             WHERE u.id = $1
         `;
@@ -263,12 +263,11 @@ app.post('/register2', upload.single('petImage'), async (req, res) => {
     }
 
     try {
-        const userId = req.session.user.id; // Link the pet to the logged-in user
         const query = `
-            INSERT INTO pets (name, class, breed, age, color, weight, birthday, eye_color, location, bio, price, image_url, owner_id) 
-            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13) RETURNING id;
+            INSERT INTO pets (name, class, breed, age, color, weight, birthday, eye_color, location, bio, price, image_url) 
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) RETURNING id;
         `;
-        await db.none(query, [petName, petClass, petBreed, petAge, petColor, petWeight, petBirthday, petEyecolor, petLoc, petBio, petPrice, petImage, userId]);
+        const newPet = await db.none(query, [petName, petClass, petBreed, petAge, petColor, petWeight, petBirthday, petEyecolor, petLoc, petBio, petPrice, petImage]);
         res.redirect('/profile');
     } catch (err) {
         console.error('Error during pet registration:', err);
