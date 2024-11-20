@@ -349,6 +349,20 @@ app.get('/cart', async (req, res) => {
     }
 });
 
+app.get('/logout', (req, res) => {
+    // Destroy the user session
+    req.session.destroy((err) => {
+        if (err) {
+            console.error("Error destroying session:", err);
+            return res.status(500).send("Something went wrong.");
+        }
+
+        // Redirect to the home page with a query parameter for the logout message
+        res.redirect('/?logout=true');
+    });
+});
+
+
 const auth = (req, res, next) => {
     if (!req.session.user) {
         // Store the original URL to redirect after login
