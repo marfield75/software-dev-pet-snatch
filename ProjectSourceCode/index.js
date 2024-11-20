@@ -117,7 +117,7 @@ app.get('/payment', (req, res) => {
 
 
 app.get('/home', async (req, res) => {
-    const query = 'SELECT * FROM pets LIMIT 1;';
+    const query = 'SELECT * FROM pets;';
     db.any(query)
         .then(data => {
             // still figuring out how to use each to display all cards
@@ -264,12 +264,33 @@ app.get('/pet', async (req, res) => {
     const query = 'SELECT * FROM pets LIMIT 1;';
     db.any(query)
         .then(data => {
-            res.render('pages/pet', { pet: data[0] });
+            const userData = getUserData(data[0].id);
+            res.render('pages/pet', { pet: data[0], user: userData});
         })
         .catch(err => {
             console.log(err);
             res.redirect('/home');
         });
+});
+
+app.get('/cart', async (req, res) => {
+    try {
+        // get user id
+        const userId = req.session.user.id;
+        if (!userData) {
+            return res.status(404).send('User not found');
+        }
+
+        // select all pets in that user's cart
+        const query = 'SELECT p.* FROM pets p JOIN cart c ON p.pet_id = c.pet_id WHERE c.user_id = $1;';
+        pets_in_cart = await db.none(query, [userId]);
+
+        // render the page with the pets in the cart
+        res.render('pages/cart', { pets: pets_in_cart });
+    } catch (error) {
+        console.error('Error retrieving cart information:', error);
+        res.status(500).send('Error retrieving cart information');
+    }
 });
 
 const auth = (req, res, next) => {
