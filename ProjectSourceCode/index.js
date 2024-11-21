@@ -247,19 +247,20 @@ app.post('/login', async (req, res) => {
     }
 });
 
-app.get('/pet', async (req, res) => {
-    const query = 'SELECT * FROM pets LIMIT 1;';
-    db.any(query)
-        .then(data => {
-            const userData = getUserData(data[0].id);
-            console.log('Image URL:', data[0].image_url); // Log the image URL
-            res.render('pages/pet', { pet: data[0], user: userData });
-        })
-        .catch(err => {
-            console.log(err);
-            res.redirect('/home');
-        });
+app.get('/pet/:petid', async (req, res) => {
+    const pet_id = req.params.petid;
+    const query = 'SELECT * FROM pets WHERE id = $1 LIMIT 1;';
+    
+    try {
+        const data = await db.any(query, [pet_id]); // await db query
+        //const userData = await getUserData(data[0].id); // await the getUserData function
+        res.render('pages/pet', { pet: data[0]/*, user: userData*/ });
+    } catch (err) {
+        console.log(err);
+        res.redirect('/home');
+    }
 });
+
 
 app.get('/cart', async (req, res) => {
     try {
@@ -271,7 +272,7 @@ app.get('/cart', async (req, res) => {
 
         // select all pets in that user's cart
         const query = 'SELECT p.* FROM pets p JOIN cart c ON p.pet_id = c.pet_id WHERE c.user_id = $1;';
-        pets_in_cart = await db.none(query, [userId]);
+        pets_in_cart = await db.any(query, [userId]);
 
         // render the page with the pets in the cart
         res.render('pages/cart', { pets: pets_in_cart });
