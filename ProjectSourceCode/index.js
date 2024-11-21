@@ -155,6 +155,7 @@ app.get('/profile', async (req, res) => {
     }
 });
 
+//update profile route
 app.get('/editProfile', async (req, res) => {
     try {
         const userId = req.session.user.id; // Get the user ID from the session
