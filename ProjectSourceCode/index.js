@@ -15,6 +15,7 @@ const axios = require('axios'); // To make HTTP requests from our server. We'll 
 const multer = require('multer');
 const fs = require('fs');
 
+var LoggedIn = 1;
 
 // *****************************************************
 // <!-- Section 2 : Connect to DB -->
@@ -117,18 +118,22 @@ app.get('/payment', (req, res) => {
 
 
 app.get('/home', async (req, res) => {
+    var message = "";
+    if (LoggedIn === 0) {
+        message = "Successfully Logged Out";
+        LoggedIn = 1;
+    }
     const query = 'SELECT * FROM pets;';
     db.any(query)
         .then(data => {
             // still figuring out how to use each to display all cards
-            res.render('pages/home', { pet: data });
+            res.render('pages/home', { pet: data, message: message });
         })
         .catch(err => {
             console.log(err);
             res.redirect('/home');
         });
 });
-
 app.get('/search', (req, res) => {
     res.render('pages/search')
 });
@@ -319,7 +324,6 @@ app.post('/login', async (req, res) => {
             email: user.email,
         };
         await req.session.save();
-
         res.redirect('/home');
     } catch (err) {
         console.error('Login error:', err);
@@ -367,9 +371,9 @@ app.get('/logout', (req, res) => {
             console.error("Error destroying session:", err);
             return res.status(500).send("Something went wrong.");
         }
-
+        LoggedIn = 0;
         // Redirect to the home page with a query parameter for the logout message
-        res.redirect('/home/?logout=true');
+        res.redirect('/home');
     });
 });
 
