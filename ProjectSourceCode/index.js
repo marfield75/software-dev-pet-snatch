@@ -172,6 +172,35 @@ app.get('/editProfile', async (req, res) => {
     }
 });
 
+app.post('/updateProfile', auth, async (req, res) => {
+    const { username, email, password } = req.body;
+    const userId = req.session.user.id;
+
+    try {
+        if (!username || !email) {
+            return res.status(400).json({ success: false, message: 'Username and email are required.' });
+        }
+
+        let query, params;
+
+        if (password) {
+            const passwordHash = await bcrypt.hash(password, 10);
+            query = 'UPDATE users SET username = $1, email = $2, password_hash = $3 WHERE id = $4';
+            params = [username, email, passwordHash, userId];
+        } else {
+            query = 'UPDATE users SET username = $1, email = $2 WHERE id = $3';
+            params = [username, email, userId];
+        }
+
+        await db.none(query, params);
+
+        res.json({ success: true });
+    } catch (error) {
+        console.error('Error updating profile:', error);
+        res.status(500).json({ success: false, message: 'Failed to update profile.' });
+    }
+});
+
 async function getUserData(userId) {
     try {
         // Query to fetch user information along with their pets based on user ID
