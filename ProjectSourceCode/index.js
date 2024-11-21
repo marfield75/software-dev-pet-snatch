@@ -138,120 +138,6 @@ app.get('/search', (req, res) => {
     res.render('pages/search')
 });
 
-app.get('/profile', async (req, res) => {
-    try {
-        const userId = req.session.user.id; // Get the user ID from the session
-        const userData = await getUserData(userId); // Fetch user data using user ID
-
-        if (!userData) {
-            return res.status(404).send('User not found');
-        }
-
-        // Render the profile page with user data
-        res.render('pages/profile', { user: userData });
-    } catch (error) {
-        console.error('Error retrieving profile information:', error);
-        res.status(500).send('Error retrieving profile information');
-    }
-});
-
-//update profile route
-app.get('/editProfile', async (req, res) => {
-    try {
-        const userId = req.session.user.id; // Get the user ID from the session
-        const userData = await getUserData(userId); // Fetch user data using user ID
-
-        if (!userData) {
-            return res.status(404).send('User not found');
-        }
-
-        // Render the edit profile page with user data
-        res.render('pages/editProfile', { user: userData });
-    } catch (error) {
-        console.error('Error retrieving edit profile information:', error);
-        res.status(500).send('Error retrieving edit profile information');
-    }
-});
-
-app.post('/updateProfile', auth, async (req, res) => {
-    const { username, email, password } = req.body;
-    const userId = req.session.user.id;
-
-    try {
-        if (!username || !email) {
-            return res.status(400).json({ success: false, message: 'Username and email are required.' });
-        }
-
-        let query, params;
-
-        if (password) {
-            const passwordHash = await bcrypt.hash(password, 10);
-            query = 'UPDATE users SET username = $1, email = $2, password_hash = $3 WHERE id = $4';
-            params = [username, email, passwordHash, userId];
-        } else {
-            query = 'UPDATE users SET username = $1, email = $2 WHERE id = $3';
-            params = [username, email, userId];
-        }
-
-        await db.none(query, params);
-
-        res.json({ success: true });
-    } catch (error) {
-        console.error('Error updating profile:', error);
-        res.status(500).json({ success: false, message: 'Failed to update profile.' });
-    }
-});
-
-async function getUserData(userId) {
-    try {
-        // Query to fetch user information along with their pets based on user ID
-        const query = `
-            SELECT u.username, u.first_name, u.last_name, u.email,
-                   p.id AS pet_id, p.name AS pet_name, p.class, p.breed, p.age, p.color,
-                   p.weight, p.birthday, p.eye_color, p.location, p.bio, p.image_url
-            FROM users u
-            LEFT JOIN users_to_pets up ON u.id = up.user_id
-            LEFT JOIN pets p ON up.pet_id = p.id
-            WHERE u.id = $1
-        `;
-
-        // Execute the query with userId
-        const result = await db.any(query, [userId]);
-
-        if (result.length === 0) {
-            throw new Error('User not found');
-        }
-
-        // Build the user object based on query result
-        const user = {
-            username: result[0].username,
-            first_name: result[0].first_name,
-            last_name: result[0].last_name,
-            email: result[0].email,
-            pets: result
-                .filter(row => row.pet_id) // Only include rows with pet data
-                .map(pet => ({
-                    id: pet.pet_id,
-                    name: pet.pet_name,
-                    class: pet.class,
-                    breed: pet.breed,
-                    age: pet.age,
-                    color: pet.color,
-                    weight: pet.weight,
-                    birthday: pet.birthday,
-                    eye_color: pet.eye_color,
-                    location: pet.location,
-                    bio: pet.bio,
-                    image_url: pet.image_url
-                }))
-        };
-
-        return user;
-    } catch (error) {
-        console.error('Error fetching user data:', error);
-        throw error;
-    }
-}
 
 // POST route for handling registration form submission
 app.post('/register', async (req, res) => {
@@ -438,6 +324,7 @@ app.get('/profile', async (req, res) => {
     }
 });
 
+//update profile route
 app.get('/editProfile', async (req, res) => {
     try {
         const userId = req.session.user.id; // Get the user ID from the session
@@ -452,6 +339,35 @@ app.get('/editProfile', async (req, res) => {
     } catch (error) {
         console.error('Error retrieving edit profile information:', error);
         res.status(500).send('Error retrieving edit profile information');
+    }
+});
+
+app.post('/updateProfile', async (req, res) => {
+    const { username, email, password } = req.body;
+    const userId = req.session.user.id;
+
+    try {
+        if (!username || !email) {
+            return res.status(400).json({ success: false, message: 'Username and email are required.' });
+        }
+
+        let query, params;
+
+        if (password) {
+            const passwordHash = await bcrypt.hash(password, 10);
+            query = 'UPDATE users SET username = $1, email = $2, password_hash = $3 WHERE id = $4';
+            params = [username, email, passwordHash, userId];
+        } else {
+            query = 'UPDATE users SET username = $1, email = $2 WHERE id = $3';
+            params = [username, email, userId];
+        }
+
+        await db.none(query, params);
+
+        res.json({ success: true });
+    } catch (error) {
+        console.error('Error updating profile:', error);
+        res.status(500).json({ success: false, message: 'Failed to update profile.' });
     }
 });
 
