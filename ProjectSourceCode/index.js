@@ -365,7 +365,8 @@ app.get('/pet', async (req, res) => {
     db.any(query)
         .then(data => {
             const userData = getUserData(data[0].id);
-            res.render('pages/pet', { pet: data[0], user: userData});
+            console.log('Image URL:', data[0].image_url); // Log the image URL
+            res.render('pages/pet', { pet: data[0], user: userData });
         })
         .catch(err => {
             console.log(err);
