@@ -1,4 +1,5 @@
 {{!-- Cards that pull data from the database  --}}
+{{> message}}
 <div id="homebody">
     {{#each pet}}
     <div class="row">
@@ -6,7 +7,7 @@
             <div class="card">
                 <div class="container">
                     <div class="pet-info">
-                        <img src="/img/{{this.image_url}}" alt="{{this.name}}" />
+                        <img src="../../src/resources/img/{{this.image_url}}" alt="{{this.image_url}}" />
                         <h3>Name: {{this.name}}</h3>
                         <p>Class: {{this.class}}</p>
                         <p>Age: {{this.age}}</p>
