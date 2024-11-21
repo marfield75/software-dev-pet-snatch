@@ -4,16 +4,19 @@
     {{#each pet}}
     <div class="column">
         <div class="row">
-            <div class="card">
-                <div class="container">
-                    <div class="pet-info">
-                        <img src="{{this.image_url}}" alt="{{this.image_url}}" style="width: 200px; height: auto;" />
-                        <h3 style="font-size: medium;">Name: {{this.name}}</h3>
-                        <p>Class: {{this.class}}</p>
-                        <p>Age: {{this.age}}</p>
+            <a method="GET" action="/pet/{{this.id}}" href="/pet/{{this.id}}" style="text-decoration: none">
+                <div class="card">
+                    <div class="container">
+                        <div class="pet-info">
+                            <img src="{{this.image_url}}" alt="{{this.image_url}}"
+                                style="width: 200px; height: auto;" />
+                            <h3 style="font-size: medium;">Name: {{this.name}}</h3>
+                            <p>Class: {{this.class}}</p>
+                            <p>Age: {{this.age}}</p>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </a>
         </div>
     </div>
     {{/each}}
