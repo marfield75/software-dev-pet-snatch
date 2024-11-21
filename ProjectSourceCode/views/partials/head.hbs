@@ -9,11 +9,11 @@
   {{> title}}
 
   <script>
-    console.log("Script in head.hbs is running!")
-    window.onload = function() {
+    window.onload = function() 
+    {
         const urlParams = new URLSearchParams(window.location.search);
-        console.log('Query params:', urlParams.toString()); // Debug log
-        if (urlParams.has('logout')) {
+        if (urlParams.has('logout')) 
+        {
             alert("You have successfully logged out.");
         }
     };

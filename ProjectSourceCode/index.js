@@ -358,7 +358,7 @@ app.get('/logout', (req, res) => {
         }
 
         // Redirect to the home page with a query parameter for the logout message
-        res.redirect('/?logout=true');
+        res.redirect('/home/?logout=true');
     });
 });
 
