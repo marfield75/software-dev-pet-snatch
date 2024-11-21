@@ -15,6 +15,7 @@ const axios = require('axios'); // To make HTTP requests from our server. We'll 
 const multer = require('multer');
 const fs = require('fs');
 
+var LoggedIn = 1;
 
 // *****************************************************
 // <!-- Section 2 : Connect to DB -->
@@ -117,18 +118,22 @@ app.get('/payment', (req, res) => {
 
 
 app.get('/home', async (req, res) => {
-    const query = 'SELECT * FROM pets LIMIT 1;';
+    var message = "";
+    if (LoggedIn === 0) {
+        message = "Successfully Logged Out";
+        LoggedIn = 1;
+    }
+    const query = 'SELECT * FROM pets;';
     db.any(query)
         .then(data => {
             // still figuring out how to use each to display all cards
-            res.render('pages/home', { pet: data});
+            res.render('pages/home', { pet: data, message: message });
         })
         .catch(err => {
             console.log(err);
             res.redirect('/home');
         });
 });
-
 app.get('/search', (req, res) => {
     res.render('pages/search')
 });
@@ -204,7 +209,7 @@ async function getUserData(userId) {
                    p.id AS pet_id, p.name AS pet_name, p.class, p.breed, p.age, p.color,
                    p.weight, p.birthday, p.eye_color, p.location, p.bio, p.image_url
             FROM users u
-            LEFT JOIN user_uploads up ON u.id = up.user_id
+            LEFT JOIN users_to_pets up ON u.id = up.user_id
             LEFT JOIN pets p ON up.pet_id = p.id
             WHERE u.id = $1
         `;
@@ -283,27 +288,37 @@ app.post('/register', async (req, res) => {
 });
 
 app.post('/register2', upload.single('petImage'), async (req, res) => {
-    console.log('Received pet registration data:', req.body); // Log the request body
-    const { petName, petClass, petAge, petColor, petWeight, petBreed, petEyecolor, petBirthday, petBio, petLoc, petPrice } = req.body;
-    const petImage = req.file ? req.file.filename : null; // Get the filename if an image is uploaded
-    console.log('req.file.filename:', req.file.filename);
-    if (!petName || !petClass || !petAge || !petColor || !petWeight || !petBreed || !petEyecolor || !petBirthday || !petBio || !petLoc || !petPrice || !petImage) {
+    const {
+        petName, petClass, petAge, petColor, petWeight,
+        petBreed, petEyecolor, petBirthday, petBio,
+        petLoc, petPrice
+    } = req.body;
+
+    const petImage = req.file ? req.file.filename : null;
+    const userId = req.session.user?.id;
+
+    if (!userId) {
+        return res.status(401).redirect('/login'); // Ensure user is logged in
+    }
+
+    if (!petName || !petClass || !petAge || !petColor || !petWeight || !petBreed ||
+        !petEyecolor || !petBirthday || !petBio || !petLoc || !petPrice || !petImage) {
         return res.render('pages/register2', { error: 'All fields are required.' });
     }
 
     try {
-        const userId = req.session.user.id; // Link the pet to the logged-in user
         const query = `
-            INSERT INTO pets (name, class, breed, age, color, weight, birthday, eye_color, location, bio, price, image_url, owner_id) 
-            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13) RETURNING id;
+            INSERT INTO pets (name, class, breed, age, color, weight, birthday, eye_color, location, bio, price, image_url) 
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) RETURNING id;
         `;
-        await db.none(query, [petName, petClass, petBreed, petAge, petColor, petWeight, petBirthday, petEyecolor, petLoc, petBio, petPrice, petImage, userId]);
+        const newPet = await db.none(query, [petName, petClass, petBreed, petAge, petColor, petWeight, petBirthday, petEyecolor, petLoc, petBio, petPrice, petImage]);
         res.redirect('/profile');
     } catch (err) {
         console.error('Error during pet registration:', err);
         res.render('pages/register2', { error: 'Pet registration failed. Please try again.' });
     }
 });
+
 
 app.post('/login', async (req, res) => {
     const { username, password } = req.body;
@@ -338,7 +353,6 @@ app.post('/login', async (req, res) => {
             email: user.email,
         };
         await req.session.save();
-
         res.redirect('/home');
     } catch (err) {
         console.error('Login error:', err);
@@ -350,13 +364,48 @@ app.get('/pet', async (req, res) => {
     const query = 'SELECT * FROM pets LIMIT 1;';
     db.any(query)
         .then(data => {
-            res.render('pages/pet', { pet: data[0] });
+            const userData = getUserData(data[0].id);
+            res.render('pages/pet', { pet: data[0], user: userData});
         })
         .catch(err => {
             console.log(err);
             res.redirect('/home');
         });
 });
+
+app.get('/cart', async (req, res) => {
+    try {
+        // get user id
+        const userId = req.session.user.id;
+        if (!userData) {
+            return res.status(404).send('User not found');
+        }
+
+        // select all pets in that user's cart
+        const query = 'SELECT p.* FROM pets p JOIN cart c ON p.pet_id = c.pet_id WHERE c.user_id = $1;';
+        pets_in_cart = await db.none(query, [userId]);
+
+        // render the page with the pets in the cart
+        res.render('pages/cart', { pets: pets_in_cart });
+    } catch (error) {
+        console.error('Error retrieving cart information:', error);
+        res.status(500).send('Error retrieving cart information');
+    }
+});
+
+app.get('/logout', (req, res) => {
+    // Destroy the user session
+    req.session.destroy((err) => {
+        if (err) {
+            console.error("Error destroying session:", err);
+            return res.status(500).send("Something went wrong.");
+        }
+        LoggedIn = 0;
+        // Redirect to the home page with a query parameter for the logout message
+        res.redirect('/home');
+    });
+});
+
 
 const auth = (req, res, next) => {
     if (!req.session.user) {
@@ -369,6 +418,92 @@ const auth = (req, res, next) => {
 
 // Authentication Required
 app.use(auth);
+
+app.get('/profile', async (req, res) => {
+    try {
+        const userId = req.session.user.id; // Get the user ID from the session
+        const userData = await getUserData(userId); // Fetch user data using user ID
+
+        if (!userData) {
+            return res.status(404).send('User not found');
+        }
+
+        // Render the profile page with user data
+        res.render('pages/profile', { user: userData });
+    } catch (error) {
+        console.error('Error retrieving profile information:', error);
+        res.status(500).send('Error retrieving profile information');
+    }
+});
+
+app.get('/editProfile', async (req, res) => {
+    try {
+        const userId = req.session.user.id; // Get the user ID from the session
+        const userData = await getUserData(userId); // Fetch user data using user ID
+
+        if (!userData) {
+            return res.status(404).send('User not found');
+        }
+
+        // Render the edit profile page with user data
+        res.render('pages/editProfile', { user: userData });
+    } catch (error) {
+        console.error('Error retrieving edit profile information:', error);
+        res.status(500).send('Error retrieving edit profile information');
+    }
+});
+
+async function getUserData(userId) {
+    try {
+        // Query to fetch user information along with their pets based on user ID
+        const query = `
+            SELECT u.username, u.first_name, u.last_name, u.email,
+            p.id AS pet_id, p.name AS pet_name, p.class, p.breed, p.age, p.color,
+            p.weight, p.birthday, p.eye_color, p.location, p.bio, p.image_url
+            FROM users u
+            LEFT JOIN user_uploads up ON u.id = up.user_id
+            LEFT JOIN pets p ON up.pet_id = p.id
+            WHERE u.id = $1
+
+        `;
+
+        // Execute the query with userId
+        const result = await db.any(query, [userId]);
+
+        if (result.length === 0) {
+            throw new Error('User not found');
+        }
+
+        // Build the user object based on query result
+        const user = {
+            username: result[0].username,
+            first_name: result[0].first_name,
+            last_name: result[0].last_name,
+            email: result[0].email,
+            pets: result
+                .filter(row => row.pet_id) // Only include rows with pet data
+                .map(pet => ({
+                    id: pet.pet_id,
+                    name: pet.pet_name,
+                    class: pet.class,
+                    breed: pet.breed,
+                    age: pet.age,
+                    color: pet.color,
+                    weight: pet.weight,
+                    birthday: pet.birthday,
+                    eye_color: pet.eye_color,
+                    location: pet.location,
+                    bio: pet.bio,
+                    image_url: pet.image_url
+                }))
+        };
+
+        return user;
+    } catch (error) {
+        console.error('Error fetching user data:', error);
+        throw error;
+    }
+}
 
 // *****************************************************
 // <!-- Section 5 : Start Server-->

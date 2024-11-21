@@ -21,3 +21,14 @@ iii. Follow-up items, including agreed-on roles and responsibilities: David nav 
     and search, Rita payment API route,the menu bar, Pradyumna password hash, Matthew home page
     and API route for creating cards, Nora cart page outline and pet profile API
     routes, Addie profile page with separate page for edits
+
+Monday 11/18 TA Meeting
+i. Decisions made: Instead of having a designated log out page, use the message partial 
+    to displaythat the user has logged out on the home page
+ii. Alternative actions/options discussed: N/A
+iii. Follow-up items, including agreed-on roles and responsibilities: David will work on
+    the endpoints for pet registration work and be linked with the user, Nora will work on
+    the cart API routes and the handlebars on the page, Matthew will finish the homepage
+    by getting the #each handlebars property to work with the data in the db, Rite will 
+    finish the menu, Pradyumna will work on the log out, Addie will work on the edit profile
+    page
