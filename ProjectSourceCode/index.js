@@ -171,7 +171,7 @@ app.get('/editProfile', async (req, res) => {
         res.status(500).send('Error retrieving edit profile information');
     }
 });
-
+//update profile route
 app.post('/updateProfile', auth, async (req, res) => {
     const { username, email, password } = req.body;
     const userId = req.session.user.id;
