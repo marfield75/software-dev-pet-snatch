@@ -293,23 +293,10 @@ app.get('/logout', (req, res) => {
         res.redirect('/home');
     });
 });
-
-
-const auth = (req, res, next) => {
-    if (!req.session.user) {
-        // Store the original URL to redirect after login
-        req.session.redirectAfterLogin = req.originalUrl;
-        return res.redirect('/login');
-    }
-    next();
-};
-
-// Authentication Required
-app.use(auth);
-
 app.get('/profile', async (req, res) => {
     try {
         const userId = req.session.user.id; // Get the user ID from the session
+        //console.log('User ID from session:', req.session.user.id);
         const userData = await getUserData(userId); // Fetch user data using user ID
 
         if (!userData) {
@@ -381,7 +368,7 @@ async function getUserData(userId) {
             FROM users u
             LEFT JOIN user_uploads up ON u.id = up.user_id
             LEFT JOIN pets p ON up.pet_id = p.id
-            WHERE u.id = $1
+            WHERE u.id = $1; 
 
         `;
 
@@ -393,6 +380,10 @@ async function getUserData(userId) {
         }
 
         // Build the user object based on query result
+        if (result.length === 0) {
+            throw new Error('User not found');
+        }
+        
         const user = {
             username: result[0].username,
             first_name: result[0].first_name,
@@ -415,13 +406,25 @@ async function getUserData(userId) {
                     image_url: pet.image_url
                 }))
         };
-
+        
         return user;
     } catch (error) {
-        console.error('Error fetching user data:', error);
-        throw error;
+        //console.error('Error fetching user data:', error);
+        //throw error;
     }
 }
+
+const auth = (req, res, next) => {
+    if (!req.session.user) {
+        // Store the original URL to redirect after login
+        req.session.redirectAfterLogin = req.originalUrl;
+        return res.redirect('/login');
+    }
+    next();
+};
+
+// Authentication Required
+app.use(auth);
 
 // *****************************************************
 // <!-- Section 5 : Start Server-->
