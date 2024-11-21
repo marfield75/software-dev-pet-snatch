@@ -247,19 +247,20 @@ app.post('/login', async (req, res) => {
     }
 });
 
-app.get('/pet', async (req, res) => {
-    const query = 'SELECT * FROM pets LIMIT 1;';
-    db.any(query)
-        .then(data => {
-            const userData = getUserData(data[0].id);
-            console.log('Image URL:', data[0].image_url); // Log the image URL
-            res.render('pages/pet', { pet: data[0], user: userData });
-        })
-        .catch(err => {
-            console.log(err);
-            res.redirect('/home');
-        });
+app.get('/pet/:petid', async (req, res) => {
+    const pet_id = req.params.petid;
+    const query = 'SELECT * FROM pets WHERE id = $1 LIMIT 1;';
+    
+    try {
+        const data = await db.any(query, [pet_id]); // await db query
+        //const userData = await getUserData(data[0].id); // await the getUserData function
+        res.render('pages/pet', { pet: data[0]/*, user: userData*/ });
+    } catch (err) {
+        console.log(err);
+        res.redirect('/home');
+    }
 });
+
 
 app.get('/cart', async (req, res) => {
     try {
@@ -271,7 +272,7 @@ app.get('/cart', async (req, res) => {
 
         // select all pets in that user's cart
         const query = 'SELECT p.* FROM pets p JOIN cart c ON p.pet_id = c.pet_id WHERE c.user_id = $1;';
-        pets_in_cart = await db.none(query, [userId]);
+        pets_in_cart = await db.any(query, [userId]);
 
         // render the page with the pets in the cart
         res.render('pages/cart', { pets: pets_in_cart });
@@ -293,23 +294,10 @@ app.get('/logout', (req, res) => {
         res.redirect('/home');
     });
 });
-
-
-const auth = (req, res, next) => {
-    if (!req.session.user) {
-        // Store the original URL to redirect after login
-        req.session.redirectAfterLogin = req.originalUrl;
-        return res.redirect('/login');
-    }
-    next();
-};
-
-// Authentication Required
-app.use(auth);
-
 app.get('/profile', async (req, res) => {
     try {
         const userId = req.session.user.id; // Get the user ID from the session
+        //console.log('User ID from session:', req.session.user.id);
         const userData = await getUserData(userId); // Fetch user data using user ID
 
         if (!userData) {
@@ -381,7 +369,7 @@ async function getUserData(userId) {
             FROM users u
             LEFT JOIN user_uploads up ON u.id = up.user_id
             LEFT JOIN pets p ON up.pet_id = p.id
-            WHERE u.id = $1
+            WHERE u.id = $1; 
 
         `;
 
@@ -393,6 +381,10 @@ async function getUserData(userId) {
         }
 
         // Build the user object based on query result
+        if (result.length === 0) {
+            throw new Error('User not found');
+        }
+        
         const user = {
             username: result[0].username,
             first_name: result[0].first_name,
@@ -415,13 +407,25 @@ async function getUserData(userId) {
                     image_url: pet.image_url
                 }))
         };
-
+        
         return user;
     } catch (error) {
-        console.error('Error fetching user data:', error);
-        throw error;
+        //console.error('Error fetching user data:', error);
+        //throw error;
     }
 }
+
+const auth = (req, res, next) => {
+    if (!req.session.user) {
+        // Store the original URL to redirect after login
+        req.session.redirectAfterLogin = req.originalUrl;
+        return res.redirect('/login');
+    }
+    next();
+};
+
+// Authentication Required
+app.use(auth);
 
 // *****************************************************
 // <!-- Section 5 : Start Server-->
