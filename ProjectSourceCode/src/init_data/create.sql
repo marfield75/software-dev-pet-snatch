@@ -19,10 +19,21 @@ CREATE TABLE pets(
     eye_color text,
     location text,
     bio text,
+    price float,
     image_url text
 );
 
-CREATE TABLE users_to_pets(
+CREATE TABLE user_uploads(
+    user_id SMALLINT,
+    pet_id SMALLINT
+);
+
+CREATE TABLE cart(
+    user_id SMALLINT,
+    pet_id SMALLINT
+);
+
+CREATE TABLE wishlist(
     user_id SMALLINT,
     pet_id SMALLINT
 );
