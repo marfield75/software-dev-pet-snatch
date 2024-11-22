@@ -182,7 +182,7 @@ app.post('/register2', upload.single('petImage'), async (req, res) => {
     } = req.body;
 
     const petImage = req.file ? req.file.filename : null;
-    const userId = req.session.user?.id;
+    const userId = req.session.user?.id; // Get the logged-in user ID from the session
 
     if (!userId) {
         return res.status(401).redirect('/login'); // Ensure user is logged in
@@ -194,17 +194,34 @@ app.post('/register2', upload.single('petImage'), async (req, res) => {
     }
 
     try {
-        const query = `
+        // Insert pet details into the `pets` table
+        const petQuery = `
             INSERT INTO pets (name, class, breed, age, color, weight, birthday, eye_color, location, bio, price, image_url) 
             VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) RETURNING id;
         `;
-        const newPet = await db.none(query, [petName, petClass, petBreed, petAge, petColor, petWeight, petBirthday, petEyecolor, petLoc, petBio, petPrice, petImage]);
-        res.redirect('/profile');
+        const newPet = await db.one(petQuery, [
+            petName, petClass, petBreed, petAge, petColor, 
+            petWeight, petBirthday, petEyecolor, petLoc, petBio, 
+            petPrice, petImage
+        ]);
+        console.log('New pet registered:', newPet);
+
+        const petId = newPet.id; // Retrieve the ID of the newly inserted pet
+
+        // Link the pet to the logged-in user in the `user_uploads` table
+        const linkQuery = `
+            INSERT INTO user_uploads (user_id, pet_id) VALUES ($1, $2);
+        `;
+        await db.none(linkQuery, [userId, petId]);
+
+        console.log(`Pet registered successfully with ID: ${petId}, linked to user ID: ${userId}`);
+        res.redirect('/profile'); // Redirect to the user's profile page
     } catch (err) {
         console.error('Error during pet registration:', err);
         res.render('pages/register2', { error: 'Pet registration failed. Please try again.' });
     }
 });
+
 
 
 app.post('/login', async (req, res) => {
@@ -282,18 +299,7 @@ app.get('/cart', async (req, res) => {
     }
 });
 
-app.get('/logout', (req, res) => {
-    // Destroy the user session
-    req.session.destroy((err) => {
-        if (err) {
-            console.error("Error destroying session:", err);
-            return res.status(500).send("Something went wrong.");
-        }
-        LoggedIn = 0;
-        // Redirect to the home page with a query parameter for the logout message
-        res.redirect('/home');
-    });
-});
+
 app.get('/profile', async (req, res) => {
     try {
         const userId = req.session.user.id; // Get the user ID from the session
@@ -407,7 +413,7 @@ async function getUserData(userId) {
                     image_url: pet.image_url
                 }))
         };
-        
+        console.log('User data:', user);
         return user;
     } catch (error) {
         //console.error('Error fetching user data:', error);
@@ -427,6 +433,18 @@ const auth = (req, res, next) => {
 // Authentication Required
 app.use(auth);
 
+app.get('/logout', (req, res) => {
+    // Destroy the user session
+    req.session.destroy((err) => {
+        if (err) {
+            console.error("Error destroying session:", err);
+            return res.status(500).send("Something went wrong.");
+        }
+        LoggedIn = 0;
+        // Redirect to the home page with a query parameter for the logout message
+        res.redirect('/home');
+    });
+});
 // *****************************************************
 // <!-- Section 5 : Start Server-->
 // *****************************************************

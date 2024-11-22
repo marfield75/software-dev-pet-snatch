@@ -5,15 +5,17 @@
     <div class="column">
         <div class="row">
             <a method="GET" action="/pet/{{this.id}}" href="/pet/{{this.id}}" style="text-decoration: none">
-                <div class="card">
-                    <div class="container">
-                        <div class="pet-info">
-                            <img src="{{this.image_url}}" alt="{{this.image_url}}"
-                                style="width: 200px; height: auto;" />
-                            <h3 style="font-size: medium;">Name: {{this.name}}</h3>
-                            <p>Class: {{this.class}}</p>
-                            <p>Age: {{this.age}}</p>
-                        </div>
+                <div class="card" style="width: 18rem;">
+                    <img src="{{this.image_url}}" class="card-img-top" alt="{{this.image_url}}">
+                    <div class="card-body">
+                        <h6 class="card-title" style="color: black"><strong>{{this.name}}</strong></h6>
+                        <p class="card-text" style="color: black">Class: {{this.class}}</p>
+                    </div>
+                    <ul class="list-group list-group-flush" style="background-color: yellow;"></ul>
+                        <li class="list-group-item" style="color: black"><strong>Age: {{this.age}}</strong></li>
+                    </ul>
+                    <div class="card-body">
+                        <a href="/pet/{{this.id}}" class="card-link">Add to Cart</a> <!-- Add to Cart route needed-->
                     </div>
                 </div>
             </a>
