@@ -55,8 +55,8 @@ it('positive: /register with valid data from insert', done => {
     .send({
       'first-name': 'Richart',
       'last-name': 'Dobbyn',
-      email: 'rdobbyn0@springer.com',
-      username: 'rdobbyn0',
+      email: 'rdobbyn0@gmail.com',
+      username: 'rdobbyn1',
       password: 'fortnite' // Assuming the password is provided in plain text for registration
     })
     .end((err, res) => {

@@ -5,11 +5,11 @@ CREATE TABLE user_uploads(
 
 CREATE TABLE users(
     id SERIAL PRIMARY KEY UNIQUE,
-    username text,
+    username text UNIQUE NOT NULL,
     first_name text, 
     last_name text,
     password_hash text,
-    email text
+    email text UNIQUE NOT NULL
 );
 
 CREATE TABLE pets(
