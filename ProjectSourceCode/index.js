@@ -163,13 +163,13 @@ app.post('/register', async (req, res) => {
     } catch (err) {
         if (err.constraint === 'users_username_key') {
             console.error('Username already exists.');
-            res.status(400).render('pages/register', { error: 'Username already taken.' });
+            res.status(400).render('pages/register', { message: 'Username already taken.' });
         } else if (err.constraint === 'users_email_key') {
             console.error('Email already exists.');
-            res.status(400).render('pages/register', { error: 'Email already registered.' });
+            res.status(400).render('pages/register', { message: 'Email already registered.' });
         } else {
             console.error('Error during registration:', err);
-            res.status(500).render('pages/register', { error: 'Registration failed. Please try again.' });
+            res.status(500).render('pages/register', { message: 'Registration failed. Please try again.' });
         }
     }
 });
