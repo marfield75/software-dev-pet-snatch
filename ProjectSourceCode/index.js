@@ -177,20 +177,19 @@ app.post('/register', async (req, res) => {
 app.post('/register2', upload.single('petImage'), async (req, res) => {
     const {
         petName, petClass, petAge, petColor, petWeight,
-        petBreed, petEyecolor, petBirthday, petBio,
-        petLoc, petPrice
+        petBreed, eyeColor, birth, petBio,
+        location, price
     } = req.body;
-
     const petImage = req.file ? req.file.filename : null;
     const userId = req.session.user?.id; // Get the logged-in user ID from the session
 
     if (!userId) {
         return res.status(401).redirect('/login'); // Ensure user is logged in
-    }
+    }   
 
-    if (!petName || !petClass || !petAge || !petColor || !petWeight || !petBreed ||
-        !petEyecolor || !petBirthday || !petBio || !petLoc || !petPrice || !petImage) {
-        return res.render('pages/register2', { error: 'All fields are required.' });
+    if (!userId || !petName || !petClass || !petAge || !petColor || !petWeight || !petBreed ||
+        !eyeColor || !birth || !petBio || !location || !price || !petImage) {
+        return res.render('pages/register2', { message: 'All fields are required.' });
     }
 
     try {
@@ -201,8 +200,8 @@ app.post('/register2', upload.single('petImage'), async (req, res) => {
         `;
         const newPet = await db.one(petQuery, [
             petName, petClass, petBreed, petAge, petColor, 
-            petWeight, petBirthday, petEyecolor, petLoc, petBio, 
-            petPrice, petImage
+            petWeight, birth, eyeColor, location, petBio, 
+            price, petImage
         ]);
         console.log('New pet registered:', newPet);
 
@@ -218,7 +217,7 @@ app.post('/register2', upload.single('petImage'), async (req, res) => {
         res.redirect('/profile'); // Redirect to the user's profile page
     } catch (err) {
         console.error('Error during pet registration:', err);
-        res.render('pages/register2', { error: 'Pet registration failed. Please try again.' });
+        res.render('pages/register2', { message: 'Pet registration failed. Please try again.' });
     }
 });
 
@@ -238,7 +237,7 @@ app.post('/login', async (req, res) => {
 
         if (!user) {
             console.log('No user found with username:', username);
-            return res.render('pages/login', { error: 'Incorrect username or password.' });
+            return res.render('pages/login', { message: 'Incorrect username or password.' });
         }
 
         // Log found user details (excluding password for security)
