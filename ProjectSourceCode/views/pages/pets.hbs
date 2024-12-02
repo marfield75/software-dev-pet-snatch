@@ -1,0 +1,34 @@
+<div id="pets-container">
+    {{#if pets.length}}
+        <div class="row">
+            {{#each pets}}
+                <div class="column">
+                    <a href="/pet/{{this.id}}" style="text-decoration: none;">
+                        <div class="card" style="width: 18rem; margin: 1rem; border: 1px solid #ccc; border-radius: 10px;">
+                            {{#if this.image_url}}
+                                <img src="/src/resources/img/{{this.image_url}}" class="card-img-top" alt="{{this.name}}" style="height: 200px; object-fit: cover; border-radius: 10px 10px 0 0;">
+                            {{else}}
+                                <img src="/src/resources/img/default-pet.jpg" class="card-img-top" alt="Default Pet Image" style="height: 200px; object-fit: cover; border-radius: 10px 10px 0 0;">
+                            {{/if}}
+                            <div class="card-body">
+                                <h5 class="card-title" style="color: #333;"><strong>{{this.name}}</strong></h5>
+                                <p class="card-text" style="color: #555;">Class: {{this.class}}</p>
+                                <p class="card-text" style="color: #555;">Breed: {{this.breed}}</p>
+                            </div>
+                            <ul class="list-group list-group-flush" style="background-color: #f9f9f9;">
+                                <li class="list-group-item" style="color: #333;">Age: {{this.age}}</li>
+                                <li class="list-group-item" style="color: #333;">Location: {{this.location}}</li>
+                            </ul>
+                            <div class="card-body">
+                                <a href="/pet/{{this.id}}" class="card-link">View Details</a>
+                                <a href="/cart/add/{{this.id}}" class="card-link">Add to Cart</a> <!-- Replace with your add-to-cart route -->
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            {{/each}}
+        </div>
+    {{else}}
+        <p style="text-align: center; color: #555;">No pets found matching your search criteria.</p>
+    {{/if}}
+</div>          
