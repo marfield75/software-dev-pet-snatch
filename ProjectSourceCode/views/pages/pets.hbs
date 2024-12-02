@@ -14,14 +14,11 @@
                                 <h5 class="card-title" style="color: #333;"><strong>{{this.name}}</strong></h5>
                                 <p class="card-text" style="color: #555;">Class: {{this.class}}</p>
                                 <p class="card-text" style="color: #555;">Breed: {{this.breed}}</p>
+                                <p class="card-text" style="color: #555;">Age: {{this.age}}</p>
+                                <p class="card-text" style="color: #555;">Location: {{this.location}}</p>
                             </div>
-                            <ul class="list-group list-group-flush" style="background-color: #f9f9f9;">
-                                <li class="list-group-item" style="color: #333;">Age: {{this.age}}</li>
-                                <li class="list-group-item" style="color: #333;">Location: {{this.location}}</li>
-                            </ul>
                             <div class="card-body">
                                 <a href="/pet/{{this.id}}" class="card-link">View Details</a>
-                                <a href="/cart/add/{{this.id}}" class="card-link">Add to Cart</a> <!-- Replace with your add-to-cart route -->
                             </div>
                         </div>
                     </a>
@@ -31,4 +28,4 @@
     {{else}}
         <p style="text-align: center; color: #555;">No pets found matching your search criteria.</p>
     {{/if}}
-</div>          
+</div>

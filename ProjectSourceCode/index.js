@@ -322,6 +322,7 @@ app.get('/search/pets', async (req, res) => {
 
         const pets = await db.any(query, params);
 
+        console.log("Retrieved pets:", pets); 
         res.render('pages/pets', { pets });
     } catch (error) {
         console.error('Error searching pets:', error);
