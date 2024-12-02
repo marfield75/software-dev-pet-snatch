@@ -299,6 +299,52 @@ app.get('/cart', async (req, res) => {
     }
 });
 
+app.get('/search/pets', async (req, res) => {
+    const { name, class: petClass, breed } = req.query;
+
+    try {
+        let query = 'SELECT * FROM pets WHERE 1=1';
+        const params = [];
+
+        if (name) {
+            query += ' AND name ILIKE $' + (params.length + 1);
+            params.push(`%${name}%`);
+        }
+
+        if (petClass) {
+            query += ' AND class ILIKE $' + (params.length + 1);
+            params.push(`%${petClass}%`);
+        }
+
+        if (breed) {
+            query += ' AND breed ILIKE $' + (params.length + 1);
+            params.push(`%${breed}%`);
+        }
+
+        const pets = await db.any(query, params);
+
+        res.render('pages/pets', { pets });
+    } catch (error) {
+        console.error('Error searching pets:', error);
+        res.status(500).render('pages/pets', { message: 'Failed to search pets', pets: [] });
+    }
+});
+
+
+
+const auth = (req, res, next) => {
+    if (!req.session.user) {
+        // Store the original URL to redirect after login
+        req.session.redirectAfterLogin = req.originalUrl;
+        // Set an error message in the session
+        req.session.errorMessage = 'Please log in to continue.';
+        return res.redirect('/login');
+    }
+    next();
+};
+
+// Authentication Required
+app.use(auth);
 
 app.get('/profile', async (req, res) => {
     try {
@@ -421,17 +467,7 @@ async function getUserData(userId) {
     }
 }
 
-const auth = (req, res, next) => {
-    if (!req.session.user) {
-        // Store the original URL to redirect after login
-        req.session.redirectAfterLogin = req.originalUrl;
-        return res.redirect('/login');
-    }
-    next();
-};
 
-// Authentication Required
-app.use(auth);
 
 app.get('/logout', (req, res) => {
     // Destroy the user session
