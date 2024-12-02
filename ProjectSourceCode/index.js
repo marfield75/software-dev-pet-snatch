@@ -194,7 +194,7 @@ app.post('/register2', upload.single('petImage'), async (req, res) => {
 
     try {
         // Insert pet details into the `pets` table
-        const image_url = `/src/resources/img/${petImage}`;
+        const image_url = `../src/resources/img/${petImage}`;
         const petQuery = `
             INSERT INTO pets (name, class, breed, age, color, weight, birthday, eye_color, location, bio, price, image_url) 
             VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) RETURNING id;
