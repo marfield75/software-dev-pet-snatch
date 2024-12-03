@@ -134,9 +134,7 @@ app.get('/home', async (req, res) => {
             res.redirect('/home');
         });
 });
-app.get('/search', (req, res) => {
-    res.render('pages/search')
-});
+
 
 
 // POST route for handling registration form submission
@@ -299,7 +297,10 @@ app.get('/cart', async (req, res) => {
     }
 });
 
-app.get('/search/pets', async (req, res) => {
+
+
+
+app.get('/search', async (req, res) => {
     const { name, class: petClass, breed } = req.query;
 
     try {
