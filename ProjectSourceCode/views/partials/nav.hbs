@@ -8,70 +8,61 @@
       <div class="collapse navbar-collapse" id="navbar-collapse">
         <ul class="navbar-nav me-auto">
           <li class="nav-item">
-            <a class="nav-link" href="/discover">Home</a>
+            <a class="nav-link" href="/home">Home</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/discover">Profile</a>
+            <a class="nav-link" href="/profile">Profile</a>
           </li>
 
           <!-- Search Dropdown -->
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button" data-bs-toggle="dropdown"
+              aria-expanded="false">
               Search
             </a>
             <ul class="dropdown-menu" aria-labelledby="searchDropdown">
-              <div class="row">
-    <div class="col-md-4">
-      <h4>Dog</h4>
-      <ul>
-        <li>Tea Cup Dog</li>
-        <li>Golden Retriever</li>
+              <!-- Search Form -->
+              <form id="search-form" action="/search" method="get" class="search-bar">
+                <div class="input-field">
+                  <input type="text" name="name" id="name" placeholder="Search by Name" />
+                </div>
+                <div class="input-field">
+                  <input type="text" name="class" id="class" placeholder="Search by Class" />
+                </div>
+                <div class="input-field">
+                  <input type="text" name="breed" id="breed" placeholder="Search by Breed" />
+                </div>
+                <button type="submit" class="btn waves-effect waves-light">Search</button>
+        </form>
       </ul>
-    </div>
-    <div class="col-md-4">
-      <h4>Bird</h4>
-      <ul>
-        <li>Parrot</li>
-        <li>Canary</li>
-      </ul>
-    </div>
-    <div class="col-md-4">
-      <h4>Cat</h4>
-      <ul>
-        <li>Persian</li>
-        <li>Siamese</li>
-      </ul>
-    </div>
-  </div>
-            </ul>
-          </li>
+    </li>
 
-          <li class="nav-item mx-auto">
-            <div class="navbar-center d-flex align-items-center">
-              <span class="center-text">Pet -  </span>
-              <img src="IMG_8981.jpg" alt="Center Image" class="center-image">
-              <span class="center-text">- Snatch</span>
-            </div>
-          </li>
-
-        </ul>
-        
-        {{#if loggedIn}}
-        <div class="nav-item me-3">
-          <a class="nav-link fw-bold" href="/favorites">Favorites</a>
-        </div>
-        <div class="nav-item me-3">
-          <a class="nav-link fw-bold" href="/logout">Logout</a>
-        </div>
-        {{else}}
-        <div class="nav-item me-3">
-          <a class="nav-link fw-bold" href="/register">Register</a>
-        </div>
-        <div class="nav-item me-3">
-          <a class="nav-link fw-bold" href="/login">Login</a>
-        </div>
-        {{/if}}
+    <li class="nav-item mx-auto">
+      <div class="navbar-center d-flex align-items-center">
+        <span class="center-text">Pet - </span>
+        <img src="IMG_8981.jpg" alt="Center Image" class="center-image">
+        <span class="center-text">- Snatch</span>
       </div>
+    </li>
+
+    </ul>
+
+    {{#if loggedIn}}
+    <div class="nav-item me-3">
+      <a class="nav-link fw-bold" href="/favorites">Favorites</a>
+    </div>
+    <div class="nav-item me-3">
+      <a class="nav-link fw-bold" href="/logout">Logout</a>
+    </div>
+    {{else}}
+    <div class="nav-item me-3">
+      <a class="nav-link fw-bold" href="/register">Register</a>
+    </div>
+    <div class="nav-item me-3">
+      <a class="nav-link fw-bold" href="/login">Login</a>
+    </div>
+    {{/if}}
+    </div>
     </div>
   </nav>
 </header>

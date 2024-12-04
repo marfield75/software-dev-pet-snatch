@@ -39,7 +39,7 @@ const dbConfig = {
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        const dir = path.join(__dirname, '../../src/resources/img/');
+        const dir = path.join(__dirname, '/src/resources/img');
         fs.mkdirSync(dir, { recursive: true });
         cb(null, dir);
     },
@@ -134,9 +134,7 @@ app.get('/home', async (req, res) => {
             res.redirect('/home');
         });
 });
-app.get('/search', (req, res) => {
-    res.render('pages/search')
-});
+
 
 
 // POST route for handling registration form submission
@@ -163,13 +161,13 @@ app.post('/register', async (req, res) => {
     } catch (err) {
         if (err.constraint === 'users_username_key') {
             console.error('Username already exists.');
-            res.status(400).render('pages/register', { error: 'Username already taken.' });
+            res.status(400).render('pages/register', { message: 'Username already taken.' });
         } else if (err.constraint === 'users_email_key') {
             console.error('Email already exists.');
-            res.status(400).render('pages/register', { error: 'Email already registered.' });
+            res.status(400).render('pages/register', { message: 'Email already registered.' });
         } else {
             console.error('Error during registration:', err);
-            res.status(500).render('pages/register', { error: 'Registration failed. Please try again.' });
+            res.status(500).render('pages/register', { message: 'Registration failed. Please try again.' });
         }
     }
 });
@@ -177,34 +175,51 @@ app.post('/register', async (req, res) => {
 app.post('/register2', upload.single('petImage'), async (req, res) => {
     const {
         petName, petClass, petAge, petColor, petWeight,
-        petBreed, petEyecolor, petBirthday, petBio,
-        petLoc, petPrice
+        petBreed, eyeColor, birth, petBio,
+        location, price
     } = req.body;
-
     const petImage = req.file ? req.file.filename : null;
-    const userId = req.session.user?.id;
+    const userId = req.session.user?.id; // Get the logged-in user ID from the session
 
     if (!userId) {
         return res.status(401).redirect('/login'); // Ensure user is logged in
-    }
+    }   
 
-    if (!petName || !petClass || !petAge || !petColor || !petWeight || !petBreed ||
-        !petEyecolor || !petBirthday || !petBio || !petLoc || !petPrice || !petImage) {
-        return res.render('pages/register2', { error: 'All fields are required.' });
+    if (!userId || !petName || !petClass || !petAge || !petColor || !petWeight || !petBreed ||
+        !eyeColor || !birth || !petBio || !location || !price || !petImage) {
+        return res.render('pages/register2', { message: 'All fields are required.' });
     }
 
     try {
-        const query = `
+        // Insert pet details into the `pets` table
+        const image_url = `/src/resources/img/${petImage}`;
+        const petQuery = `
             INSERT INTO pets (name, class, breed, age, color, weight, birthday, eye_color, location, bio, price, image_url) 
             VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) RETURNING id;
         `;
-        const newPet = await db.none(query, [petName, petClass, petBreed, petAge, petColor, petWeight, petBirthday, petEyecolor, petLoc, petBio, petPrice, petImage]);
-        res.redirect('/profile');
+        const newPet = await db.one(petQuery, [
+            petName, petClass, petBreed, petAge, petColor, 
+            petWeight, birth, eyeColor, location, petBio, 
+            price, image_url
+        ]);
+        console.log('New pet registered:', newPet);
+
+        const petId = newPet.id; // Retrieve the ID of the newly inserted pet
+
+        // Link the pet to the logged-in user in the `user_uploads` table
+        const linkQuery = `
+            INSERT INTO user_uploads (user_id, pet_id) VALUES ($1, $2);
+        `;
+        await db.none(linkQuery, [userId, petId]);
+
+        console.log(`Pet registered successfully with ID: ${petId}, linked to user ID: ${userId}`);
+        res.redirect('/profile'); // Redirect to the user's profile page
     } catch (err) {
         console.error('Error during pet registration:', err);
-        res.render('pages/register2', { error: 'Pet registration failed. Please try again.' });
+        res.render('pages/register2', { message: 'Pet registration failed. Please try again.' });
     }
 });
+
 
 
 app.post('/login', async (req, res) => {
@@ -221,7 +236,7 @@ app.post('/login', async (req, res) => {
 
         if (!user) {
             console.log('No user found with username:', username);
-            return res.render('pages/login', { error: 'Incorrect username or password.' });
+            return res.render('pages/login', { message: 'Incorrect username or password.' });
         }
 
         // Log found user details (excluding password for security)
@@ -247,19 +262,20 @@ app.post('/login', async (req, res) => {
     }
 });
 
-app.get('/pet', async (req, res) => {
-    const query = 'SELECT * FROM pets LIMIT 1;';
-    db.any(query)
-        .then(data => {
-            const userData = getUserData(data[0].id);
-            console.log('Image URL:', data[0].image_url); // Log the image URL
-            res.render('pages/pet', { pet: data[0], user: userData });
-        })
-        .catch(err => {
-            console.log(err);
-            res.redirect('/home');
-        });
+app.get('/pet/:petid', async (req, res) => {
+    const pet_id = req.params.petid;
+    const query = 'SELECT * FROM pets WHERE id = $1 LIMIT 1;';
+    
+    try {
+        const data = await db.any(query, [pet_id]); // await db query
+        //const userData = await getUserData(data[0].id); // await the getUserData function
+        res.render('pages/pet', { pet: data[0]/*, user: userData*/ });
+    } catch (err) {
+        console.log(err);
+        res.redirect('/home');
+    }
 });
+
 
 app.get('/cart', async (req, res) => {
     try {
@@ -271,7 +287,7 @@ app.get('/cart', async (req, res) => {
 
         // select all pets in that user's cart
         const query = 'SELECT p.* FROM pets p JOIN cart c ON p.pet_id = c.pet_id WHERE c.user_id = $1;';
-        pets_in_cart = await db.none(query, [userId]);
+        pets_in_cart = await db.any(query, [userId]);
 
         // render the page with the pets in the cart
         res.render('pages/cart', { pets: pets_in_cart });
@@ -281,24 +297,49 @@ app.get('/cart', async (req, res) => {
     }
 });
 
-app.get('/logout', (req, res) => {
-    // Destroy the user session
-    req.session.destroy((err) => {
-        if (err) {
-            console.error("Error destroying session:", err);
-            return res.status(500).send("Something went wrong.");
+
+
+
+app.get('/search', async (req, res) => {
+    const { name, class: petClass, breed } = req.query;
+
+    try {
+        let query = 'SELECT * FROM pets WHERE 1=1';
+        const params = [];
+
+        if (name) {
+            query += ' AND name ILIKE $' + (params.length + 1);
+            params.push(`%${name}%`);
         }
-        LoggedIn = 0;
-        // Redirect to the home page with a query parameter for the logout message
-        res.redirect('/home');
-    });
+
+        if (petClass) {
+            query += ' AND class ILIKE $' + (params.length + 1);
+            params.push(`%${petClass}%`);
+        }
+
+        if (breed) {
+            query += ' AND breed ILIKE $' + (params.length + 1);
+            params.push(`%${breed}%`);
+        }
+
+        const pets = await db.any(query, params);
+
+        console.log("Retrieved pets:", pets); 
+        res.render('pages/pets', { pets });
+    } catch (error) {
+        console.error('Error searching pets:', error);
+        res.status(500).render('pages/pets', { message: 'Failed to search pets', pets: [] });
+    }
 });
+
 
 
 const auth = (req, res, next) => {
     if (!req.session.user) {
         // Store the original URL to redirect after login
         req.session.redirectAfterLogin = req.originalUrl;
+        // Set an error message in the session
+        req.session.errorMessage = 'Please log in to continue.';
         return res.redirect('/login');
     }
     next();
@@ -310,6 +351,7 @@ app.use(auth);
 app.get('/profile', async (req, res) => {
     try {
         const userId = req.session.user.id; // Get the user ID from the session
+        //console.log('User ID from session:', req.session.user.id);
         const userData = await getUserData(userId); // Fetch user data using user ID
 
         if (!userData) {
@@ -381,7 +423,7 @@ async function getUserData(userId) {
             FROM users u
             LEFT JOIN user_uploads up ON u.id = up.user_id
             LEFT JOIN pets p ON up.pet_id = p.id
-            WHERE u.id = $1
+            WHERE u.id = $1; 
 
         `;
 
@@ -393,6 +435,10 @@ async function getUserData(userId) {
         }
 
         // Build the user object based on query result
+        if (result.length === 0) {
+            throw new Error('User not found');
+        }
+        
         const user = {
             username: result[0].username,
             first_name: result[0].first_name,
@@ -415,14 +461,28 @@ async function getUserData(userId) {
                     image_url: pet.image_url
                 }))
         };
-
+        console.log('User data:', user);
         return user;
     } catch (error) {
-        console.error('Error fetching user data:', error);
-        throw error;
+        //console.error('Error fetching user data:', error);
+        //throw error;
     }
 }
 
+
+
+app.get('/logout', (req, res) => {
+    // Destroy the user session
+    req.session.destroy((err) => {
+        if (err) {
+            console.error("Error destroying session:", err);
+            return res.status(500).send("Something went wrong.");
+        }
+        LoggedIn = 0;
+        // Redirect to the home page with a query parameter for the logout message
+        res.redirect('/home');
+    });
+});
 // *****************************************************
 // <!-- Section 5 : Start Server-->
 // *****************************************************

@@ -1,10 +1,15 @@
+CREATE TABLE user_uploads(
+    user_id SMALLINT,
+    pet_id SMALLINT
+);
+
 CREATE TABLE users(
     id SERIAL PRIMARY KEY UNIQUE,
-    username text,
+    username text UNIQUE NOT NULL,
     first_name text, 
     last_name text,
     password_hash text,
-    email text
+    email text UNIQUE NOT NULL
 );
 
 CREATE TABLE pets(
@@ -23,10 +28,6 @@ CREATE TABLE pets(
     image_url text
 );
 
-CREATE TABLE user_uploads(
-    user_id SMALLINT,
-    pet_id SMALLINT
-);
 
 CREATE TABLE cart(
     user_id SMALLINT,

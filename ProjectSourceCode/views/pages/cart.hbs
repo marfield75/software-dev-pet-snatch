@@ -29,19 +29,16 @@
 <h3 class="text-center">Your Cart</h2>
 
       <!-- pets in cart -->
-
-  {{#each pet}}
+{{#each pets}}
     <div class="card center" style="width: 18rem;">
       <img class="card-img-top" src="https://t4.ftcdn.net/jpg/01/99/00/79/360_F_199007925_NolyRdRrdYqUAGdVZV38P4WX8pYfBaRP.jpg" alt="Card image cap">
         <div class="card-body">
           <h5 class="card-title">{{this.name}}</h5>
           <p class="card-text">{{this.price}}</p>
-          <a href="pages/profile" class="btn btn-secondary">See {{this.name}}'s profile</a>
+          <a href="/pet/{{this.id}}" class="btn btn-secondary">See {{this.name}}'s info</a>
         </div>
     </div>
-     {{/each}}
-
-
+{{/each}}
 
 <div class="mt-3 col-md-12 center">
           <button type="contact-button" class="center">Checkout</button>
