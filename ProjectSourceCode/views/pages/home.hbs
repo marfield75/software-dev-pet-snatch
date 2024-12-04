@@ -1,24 +1,22 @@
-{{!-- Cards that pull data from the database --}}
+{{!-- Display messages if any --}}
 {{> message}}
+
 <div id="homebody">
     {{#each pet}}
-    <div class="column">
-        <div class="row">
-            <a method="GET" action="/pet/{{this.id}}" href="/pet/{{this.id}}" style="text-decoration: none">
-                <div class="card" style="width: 18rem;">
-                    <img src="{{this.image_url}}" class="card-img-top" alt="{{this.image_url}}">
-                    <div class="card-body">
-                        <h6 class="card-title" style="color: black"><strong>{{this.name}}</strong></h6>
-                        <p class="card-text" style="color: black">Breed: {{this.breed}}</p>
-                    </div>
-                    <ul class="list-group list-group-flush" style="background-color: yellow;"></ul>
-                    <li class="list-group-item" style="color: black"><strong>Age: {{this.age}}</strong></li>
-                    </ul>
-                    <div class="card-body">
-                        <a href="/pet/{{this.id}}" class="card-link">Add to Cart</a> <!-- Add to Cart route needed-->
-                    </div>
-                </div>
-            </a>
+    <div class="card">
+        <img src="{{this.image_url}}" alt="{{this.name}}" class="card-img-top">
+        <div class="card-body">
+            <h6 class="card-title"><strong>{{this.name}}</strong></h6>
+            <p class="card-text">Breed: {{this.breed}}</p>
+        </div>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item"><strong>Age: {{this.age}}</strong></li>
+        </ul>
+        <div class="card-body">
+            <form method="POST" action="/view-pet">
+                <input type="hidden" name="petId" value="{{this.id}}">
+                <button type="submit" class="btn btn-primary">View Details</button>
+            </form>
         </div>
     </div>
     {{/each}}
