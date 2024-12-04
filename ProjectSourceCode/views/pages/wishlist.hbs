@@ -1,0 +1,59 @@
+<div id="pets-container">
+    <!-- Display feedback message -->
+    {{#if message}}
+    <div class="alert {{#ifEquals message "duplicate"}}alert-warning{{else}}alert-success{{/ifEquals}}">
+        {{#ifEquals message "duplicate"}}
+            This pet is already in your wishlist!
+        {{else ifEquals message "added"}}
+            Pet added to your wishlist successfully!
+        {{/ifEquals}}
+    </div>
+    {{/if}}
+
+    <!-- Wishlist Content -->
+    {{#if pets.length}}
+    <div id="homebody"> <!-- Align with the structure of home.hbs -->
+        {{#each pets}}
+        <div class="card">
+            <img src="{{this.image_url}}" class="card-img-top" alt="{{this.name}}">
+
+            <div class="card-body">
+                <h5 class="card-title"><strong>{{this.name}}</strong></h5>
+                <p class="card-text">Class: {{this.class}}</p>
+                <p class="card-text">Breed: {{this.breed}}</p>
+                <p class="card-text">Age: {{this.age}}</p>
+                <p class="card-text">Location: {{this.location}}</p>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="/view-pet">
+                    <input type="hidden" name="petId" value="{{this.id}}">
+                    <button type="submit" class="btn btn-primary">View Details</button>
+                </form>
+            </div>
+        </div>
+        {{/each}}
+    </div>
+    {{else}}
+    <p style="text-align: center; color: #555;">No pets found in your wishlist.</p>
+    {{/if}}
+</div>
+
+<style>
+    .alert {
+        padding: 10px;
+        margin: 10px 0;
+        border-radius: 5px;
+    }
+
+    .alert-warning {
+        background-color: #fff3cd;
+        color: #856404;
+        border: 1px solid #ffeeba;
+    }
+
+    .alert-success {
+        background-color: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+    }
+</style>

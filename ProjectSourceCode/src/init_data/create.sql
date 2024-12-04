@@ -34,9 +34,11 @@ CREATE TABLE cart(
     pet_id SMALLINT
 );
 
-CREATE TABLE wishlist(
-    user_id SMALLINT,
-    pet_id SMALLINT
+CREATE TABLE wishlist (
+    id SERIAL PRIMARY KEY,
+    user_id INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    pet_id INT NOT NULL REFERENCES pets(id) ON DELETE CASCADE,
+    UNIQUE (user_id, pet_id) -- Prevent duplicate entries
 );
 
 

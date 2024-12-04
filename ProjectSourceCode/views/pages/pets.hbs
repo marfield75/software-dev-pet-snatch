@@ -1,31 +1,38 @@
 <div id="pets-container">
     {{#if pets.length}}
-        <div class="row">
-            {{#each pets}}
-                <div class="column">
-                    <a href="/pet/{{this.id}}" style="text-decoration: none;">
-                        <div class="card" style="width: 18rem; margin: 1rem; border: 1px solid #ccc; border-radius: 10px;">
-                            {{#if this.image_url}}
-                                <img src="/src/resources/img/{{this.image_url}}" class="card-img-top" alt="{{this.name}}" style="height: 200px; object-fit: cover; border-radius: 10px 10px 0 0;">
-                            {{else}}
-                                <img src="/src/resources/img/default-pet.jpg" class="card-img-top" alt="Default Pet Image" style="height: 200px; object-fit: cover; border-radius: 10px 10px 0 0;">
-                            {{/if}}
-                            <div class="card-body">
-                                <h5 class="card-title" style="color: #333;"><strong>{{this.name}}</strong></h5>
-                                <p class="card-text" style="color: #555;">Class: {{this.class}}</p>
-                                <p class="card-text" style="color: #555;">Breed: {{this.breed}}</p>
-                                <p class="card-text" style="color: #555;">Age: {{this.age}}</p>
-                                <p class="card-text" style="color: #555;">Location: {{this.location}}</p>
-                            </div>
-                            <div class="card-body">
-                                <a href="/pet/{{this.id}}" class="card-link">View Details</a>
-                            </div>
-                        </div>
-                    </a>
+    <div id="homebody"> <!-- Align with the structure of home.hbs -->
+        {{#each pets}}
+        <div class="card">
+            <img src="{{this.image_url}}" class="card-img-top" alt="{{this.name}}">
+
+
+            <div class="card-body">
+                <h5 class="card-title"><strong>{{this.name}}</strong></h5>
+                <p class="card-text">Breed: {{this.breed}}</p>
+                <p class="card-text">Age: {{this.age}}</p>
+            </div>
+            <div class="card-body">
+                <!-- Display success or duplicate message -->
+                {{#if message}}
+                <div class="alert {{#ifEquals message "
+                    alreadyInWishlist"}}alert-warning{{else}}alert-success{{/ifEquals}}">
+                    {{#ifEquals message "alreadyInWishlist"}}
+                    This pet is already on your wishlist.
+                    {{else}}
+                    Pet added to your wishlist successfully!
+                    {{/ifEquals}}
                 </div>
-            {{/each}}
+                {{/if}}
+
+                <form method="POST" action="/view-pet">
+                    <input type="hidden" name="petId" value="{{this.id}}">
+                    <button type="submit" class="btn btn-primary">View Details</button>
+                </form>
+            </div>
         </div>
+        {{/each}}
+    </div>
     {{else}}
-        <p style="text-align: center; color: #555;">No pets found matching your search criteria.</p>
+    <p style="text-align: center; color: #555;">No pets found matching your search criteria.</p>
     {{/if}}
 </div>
