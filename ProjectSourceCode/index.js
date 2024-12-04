@@ -262,7 +262,7 @@ app.post('/login', async (req, res) => {
     }
 });
 
-app.get('/pet/:petid', async (req, res) => {
+app.get('/pet', async (req, res) => {
     const pet_id = req.params.petid;
     const query = 'SELECT * FROM pets WHERE id = $1 LIMIT 1;';
     
@@ -272,6 +272,23 @@ app.get('/pet/:petid', async (req, res) => {
         res.render('pages/pet', { pet: data[0]/*, user: userData*/ });
     } catch (err) {
         console.log(err);
+        res.redirect('/home');
+    }
+});
+
+app.post('/view-pet', async (req, res) => {
+    const { petId } = req.body; // Extract pet ID from the POST request body
+    const query = 'SELECT * FROM pets WHERE id = $1 LIMIT 1;';
+    
+    try {
+        const data = await db.oneOrNone(query, [petId]);
+        if (data) {
+            res.render('pages/pet', { pet: data });
+        } else {
+            res.status(404).send('Pet not found');
+        }
+    } catch (err) {
+        console.error('Error fetching pet details:', err);
         res.redirect('/home');
     }
 });
