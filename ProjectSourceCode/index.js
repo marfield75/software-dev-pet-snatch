@@ -88,6 +88,13 @@ app.use(
     })
 );
 
+// Middleware to make user data available in all views
+app.use((req, res, next) => {
+    res.locals.user = req.session.user || null;
+    next();
+});
+
+
 // *****************************************************
 // <!-- Section 4 : API Routes -->
 // *****************************************************
@@ -192,7 +199,7 @@ app.post('/register2', upload.single('petImage'), async (req, res) => {
 
     try {
         // Insert pet details into the `pets` table
-        const image_url = `/src/resources/img/${petImage}`;
+        const image_url = `${petImage}`;
         const petQuery = `
             INSERT INTO pets (name, class, breed, age, color, weight, birthday, eye_color, location, bio, price, image_url) 
             VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) RETURNING id;
@@ -364,6 +371,66 @@ const auth = (req, res, next) => {
 
 // Authentication Required
 app.use(auth);
+
+app.post('/addToWishlist', async (req, res) => {
+    const userId = req.session.user?.id;
+    const { petId } = req.body;
+
+    if (!userId) {
+        return res.status(401).redirect('/login');
+    }
+
+    try {
+        // Check if the pet is already in the wishlist
+        const existing = await db.oneOrNone(
+            'SELECT 1 FROM wishlist WHERE user_id = $1 AND pet_id = $2',
+            [userId, petId]
+        );
+
+        if (existing) {
+            return res.redirect(`/wishlist?message=duplicate`);
+        }
+
+        // Add the pet to the wishlist
+        const query = `
+            INSERT INTO wishlist (user_id, pet_id)
+            VALUES ($1, $2)
+        `;
+        await db.none(query, [userId, petId]);
+
+        res.redirect(`/wishlist?message=added`);
+    } catch (err) {
+        console.error('Error adding to wishlist:', err);
+        res.status(500).send('An error occurred while adding the pet to your wishlist.');
+    }
+});
+
+
+app.get('/wishlist', async (req, res) => {
+    const userId = req.session.user?.id; // Retrieve the logged-in user's ID from the session
+
+    if (!userId) {
+        return res.status(401).redirect('/login'); // Redirect to login if the user is not logged in
+    }
+
+    try {
+        const query = `
+            SELECT p.*
+            FROM pets p
+            JOIN wishlist w ON p.id = w.pet_id
+            WHERE w.user_id = $1;
+        `;
+
+        const wishlistItems = await db.any(query, [userId]);
+
+        // Render the wishlist page with the retrieved pets
+        res.render('pages/wishlist', { pets: wishlistItems });
+    } catch (err) {
+        console.error('Error fetching wishlist:', err);
+        res.status(500).send('An error occurred while retrieving your wishlist.');
+    }
+});
+
 
 app.get('/profile', async (req, res) => {
     try {
