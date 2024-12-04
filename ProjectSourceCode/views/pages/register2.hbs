@@ -20,7 +20,7 @@
                 <!-- Pet Age -->
                 <div>
                     <label for="pet-age">Pet's Age</label>
-                    <input type="number" id="pet-age" name="petAge" required style="width: 100%;">
+                    <input type="number" id="pet-age" name="petAge" required style="width: 100%;" min="0">
                 </div>
 
                 <!-- Pet Color -->
@@ -32,7 +32,7 @@
                 <!-- Pet Weight -->
                 <div>
                     <label for="pet-weight">Pet's Weight</label>
-                    <input type="number" id="pet-weight" name="petWeight" required style="width: 100%;">
+                    <input type="number" id="pet-weight" name="petWeight" required style="width: 100%;" min="1">
                 </div>
 
                 <!-- Pet Breed -->
@@ -61,14 +61,14 @@
 
                 <!-- Location -->
                 <div>
-                    <label for="location">Location</label>
+                    <label for="location">Location <span style="color: red; font-size: smaller;">(City,ST)</span></label>
                     <input type="text" id="location" name="location" required style="width: 100%;">
                 </div>
 
                 <!-- Pet Image Upload -->
                 <div>
-                    <label for="pet-image">price</label>
-                    <input type="number" id="price" name="price" required style="width: 100%;">
+                    <label for="price">Price <span style="color: red; font-size: smaller;">For adoption set price as 0</span></label>
+                    <input type="number" id="price" name="price" required style="width: 100%;" min="0">
                 </div>
                  
                  <!-- Pet Image Upload -->

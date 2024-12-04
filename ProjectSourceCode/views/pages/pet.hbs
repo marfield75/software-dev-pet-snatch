@@ -75,7 +75,12 @@
     <div class="mt-3 col-md-12">
       <button type="contact-button">Contact Owner</button>
       <button type="cart-button">Add to Cart</button>
-      <button class="star-button"></button>
+       <form method="POST" action="/addToWishlist" style="display: inline;">
+            <input type="hidden" name="petId" value="{{pet.id}}">
+            <button type="submit" class="star-button" title="Add to Wishlist">
+                <i class="fa fa-star"></i>
+            </button>
+        </form>
     </div>
 
     <div class="mt-3">
