@@ -82,6 +82,13 @@ insert into user_uploads (user_id, pet_id) values (22, 22);
 insert into user_uploads (user_id, pet_id) values (23, 23);
 insert into user_uploads (user_id, pet_id) values (24, 24);
 insert into user_uploads (user_id, pet_id) values (25, 25);
+insert into user_uploads (user_id, pet_id) values (26, 26);
+insert into user_uploads (user_id, pet_id) values (27, 27);
+insert into user_uploads (user_id, pet_id) values (28, 28);
+insert into user_uploads (user_id, pet_id) values (29, 29);
+insert into user_uploads (user_id, pet_id) values (30, 30);
+insert into user_uploads (user_id, pet_id) values (31, 31);
+insert into user_uploads (user_id, pet_id) values (32, 32);
 
 insert into cart (user_id, pet_id) values (1, 3);
 insert into cart (user_id, pet_id) values (1, 4);
