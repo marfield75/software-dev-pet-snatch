@@ -30,16 +30,10 @@
                         <img src="{{this.image_url}}" class="card-img-top" alt="{{this.name}}" onerror="this.src='https://via.placeholder.com/150';" />
                         <div class="card-body">
                             <!-- Pet Info -->
-                            <h5 class="card-title">{{this.name}}</h5>
-                            <p class="card-text">
-                                <strong>Class:</strong> {{this.class}}<br>
-                                <strong>Breed:</strong> {{this.breed}}<br>
-                                <strong>Age:</strong> {{this.age}}<br>
-                                <strong>Color:</strong> {{this.color}}<br>
-                                <strong>Eye Color:</strong> {{this.eye_color}}<br>
-                                <strong>Location:</strong> {{this.location}}<br>
-                            </p>
-                            <p class="card-text"><small class="text-muted">{{this.bio}}</small></p>
+                            <form method="POST" action="/view-pet" class="mb-2 w-100">
+                                <input type="hidden" name="petId" value="{{this.id}}">
+                                <button type="submit" class="btn btn-primary w-100">See info</button>
+                            </form>
                         </div>
                     </div>
                 </div>
