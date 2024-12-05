@@ -283,23 +283,34 @@ app.get('/pet', async (req, res) => {
 
 app.post('/view-pet', async (req, res) => {
     const { petId } = req.body; // Extract pet ID from the POST request body
-    const query = 'SELECT * FROM pets WHERE id = $1 LIMIT 1;';
-    const temp = 'SELECT * FROM user_uploads WHERE pet_id = $1 LIMIT 1;'
-    const query2 = 'SELECT * FROM users WHERE id = $1 LIMIT 1;'
-    try {  
-        const data = await db.oneOrNone(query, [petId]);
-        const userId = await db.oneOrNone(temp, [petId])
-        const user = await db.oneOrNone(query2, [userId.user_id]);
-        if (data) {
-            res.render('pages/pet', { pet: data, user: user });
-        } else {
-            res.status(404).send('Pet not found');
+    const petQuery = 'SELECT * FROM pets WHERE id = $1 LIMIT 1;';
+    const uploadQuery = 'SELECT * FROM user_uploads WHERE pet_id = $1 LIMIT 1;';
+    const userQuery = 'SELECT * FROM users WHERE id = $1 LIMIT 1;';
+    
+    try {
+        const pet = await db.oneOrNone(petQuery, [petId]);
+
+        if (!pet) {
+            return res.status(404).send('Pet not found');
         }
+
+        const userUpload = await db.oneOrNone(uploadQuery, [petId]);
+
+        if (!userUpload) {
+            // If no user upload record is found, render the pet without user data
+            return res.render('pages/pet', { pet, user: null });
+        }
+
+        // Fetch user details
+        const user = await db.oneOrNone(userQuery, [userUpload.user_id]);
+
+        res.render('pages/pet', { pet, user });
     } catch (err) {
         console.error('Error fetching pet details:', err);
         res.redirect('/home');
     }
 });
+
 
 
 
