@@ -304,26 +304,6 @@ app.post('/view-pet', async (req, res) => {
 });
 
 
-app.get('/cart', async (req, res) => {
-    try {
-        // get user id
-        const userId = req.session.user.id;
-        if (!userData) {
-            return res.status(404).send('User not found');
-        }
-
-        // select all pets in that user's cart
-        const query = 'SELECT p.* FROM pets p JOIN cart c ON p.pet_id = c.pet_id WHERE c.user_id = $1;';
-        pets_in_cart = await db.any(query, [userId]);
-
-        // render the page with the pets in the cart
-        res.render('pages/cart', { pets: pets_in_cart });
-    } catch (error) {
-        console.error('Error retrieving cart information:', error);
-        res.status(500).send('Error retrieving cart information');
-    }
-});
-
 
 
 
@@ -376,6 +356,7 @@ const auth = (req, res, next) => {
 app.use(auth);
 
 app.post('/addToWishlist', async (req, res) => {
+    console.log('about to add to wishlist')
     const userId = req.session.user?.id;
     const { petId } = req.body;
 
@@ -425,6 +406,7 @@ app.get('/wishlist', async (req, res) => {
         `;
 
         const wishlistItems = await db.any(query, [userId]);
+        console.log(wishlistItems)
 
         // Render the wishlist page with the retrieved pets
         res.render('pages/wishlist', { pets: wishlistItems });
@@ -433,6 +415,63 @@ app.get('/wishlist', async (req, res) => {
         res.status(500).send('An error occurred while retrieving your wishlist.');
     }
 });
+
+
+
+
+app.post('/addToCart', async (req, res) => {
+    console.log('about to add to cart');
+    const userId = req.session.user?.id;
+    const { petId } = req.body; // Changed from petId to productId
+
+    if (!userId) {
+        return res.status(401).redirect('/login');
+    }
+
+    try {
+        // Check if the product is already in the cart
+        const existing = await db.oneOrNone(
+            'SELECT 1 FROM cart WHERE user_id = $1 AND pet_id = $2',
+            [userId, petId]
+        );
+
+        if (existing) {
+            return res.redirect(`/cart?message=duplicate`);
+        }
+
+        // Add the product to the cart
+        const query = `
+            INSERT INTO cart (user_id, pet_id)
+            VALUES ($1, $2)
+        `;
+        await db.none(query, [userId, petId]);
+
+        res.redirect(`/cart?message=added`);
+    } catch (err) {
+        console.error('Error adding to cart:', err);
+        res.status(500).send('An error occurred while adding the product to your cart.');
+    }
+});
+
+
+
+app.get('/cart', async (req, res) => {
+    const userId = req.session.user?.id;
+    try {
+
+        // select all pets in that user's cart
+        const query = 'SELECT p.* FROM pets p JOIN cart c ON p.id = c.pet_id WHERE c.user_id = $1;';
+        pets_in_cart = await db.any(query, [userId]);
+
+        // render the page with the pets in the cart
+        res.render('pages/cart', { pets: pets_in_cart });
+    } catch (error) {
+        console.error('Error retrieving cart information:', error);
+        res.status(500).send('Error retrieving cart information');
+    }
+});
+
+
 
 
 app.get('/profile', async (req, res) => {
@@ -576,3 +615,92 @@ app.get('/logout', (req, res) => {
 // starting the server and keeping the connection open to listen for more requests
 module.exports = app.listen(3000);
 console.log('Server is listening on port 3000');
+
+
+
+// Function to add an item to the cart
+function addToWishlist(productName, price) {
+    let cart = JSON.parse(localStorage.getItem('Whishlist')) || [];
+    cart.push({ productName, price });
+    localStorage.setItem('Whishlist', JSON.stringify(cart));
+    displayWishlist();
+  }
+  
+  // Function to display the cart items on the webpage
+  function displayWishlist() {
+    const cart = JSON.parse(localStorage.getItem('Whishlist')) || [];
+    const cartItemsContainer = document.getElementById('WhishlistItems');
+    cartItemsContainer.innerHTML = ''; 
+    cart.forEach((item, index) => {
+      const li = document.createElement('li');
+      li.textContent = `${item.productName} - $${item.price.toFixed(2)}`;
+      cartItemsContainer.appendChild(li);
+    });
+  }
+
+  // Function to add an item to the shopping cart
+function addToCart(productName, price) {
+    let cart = JSON.parse(localStorage.getItem('Cart')) || [];
+    cart.push({ productName, price });
+    localStorage.setItem('Cart', JSON.stringify(cart));
+    displayCart();
+}
+
+// Function to display the cart items on the webpage
+function displayCart() {
+    const cart = JSON.parse(localStorage.getItem('Cart')) || [];
+    const cartItemsContainer = document.getElementById('CartItems');
+    cartItemsContainer.innerHTML = ''; // Clear existing items
+    cart.forEach((item) => {
+        const li = document.createElement('li');
+        li.textContent = `${item.productName} - $${item.price.toFixed(2)}`;
+        cartItemsContainer.appendChild(li);
+    });
+}
+
+
+  
+  
+
+app.post('/checkout', async (req, res) => {
+    const userId = req.session.user?.id;
+
+    if (!userId) {
+        return res.status(401).redirect('/login');
+    }
+
+    try {
+        const query = `
+            SELECT p.*
+            FROM pets p
+            JOIN cart c ON p.id = c.product_id
+            WHERE c.user_id = $1;
+        `;
+        const cartItems = await db.any(query, [userId]);
+
+        // Pass cart items to the payment page
+        res.render('pages/payment', { cartItems });
+    } catch (err) {
+        console.error('Error during checkout:', err);
+        res.status(500).send('An error occurred while processing the checkout.');
+    }
+});
+
+function checkout() {
+    // Redirect to the payment page
+    fetch('/api/cart')
+        .then(response => response.json())
+        .then(cartItems => {
+            // Save cart items to session storage for use on the payment page
+            sessionStorage.setItem('cartItems', JSON.stringify(cartItems));
+
+            // Redirect to the payment page
+            window.location.href = '/checkout';
+        })
+        .catch(error => {
+            console.error('Error fetching cart items:', error);
+            alert('An error occurred. Please try again.');
+        });
+}
+
+
