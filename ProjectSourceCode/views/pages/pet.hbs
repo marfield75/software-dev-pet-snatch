@@ -55,35 +55,39 @@
 
 <div id="pet-info">
   <div class="text-center">
-  <h1 class="text-center"> {{pet.name}} </h1>
-  <h4 class="text-center">Posted by <a href="/profile"> {{user.username}} </a></h4>
+    <h1 class="text-center"><b> {{pet.name}}</b></h1>
+    {{!-- <h6 class="text-center">Posted by <a href="/profile"> {{user.username}} </a></h6> --}}
 
-  <!-- pet images carousel-->
-  <img src="{{pet.image_url}}" alt="pet image" style="width: 400px; height: auto;"> <!-- deleted class="d-block w-100" -->
 
-    <!-- pet details -->
-    <div>
-      <div class="mt-3">
-        <h5>Description</h5>
-        <p><b>Class:</b> {{pet.class}} </p>
-        <p><b>Breed:</b> {{pet.breed}} </p>
-        <p><b>Age:</b> {{pet.age}} </p>
-        <p><b>Location:</b> {{pet.location}} </p>
-        <p><b>Price:</b> ${{pet.price}} </p>
+    <!-- pet images carousel-->
+    <div class="container">
+      <div style="display:flex; align-items:center; gap:200px; padding-left: 150px;">
+        <img src="{{pet.image_url}}" alt="pet image" style="width: 400px; height: auto;"> <!-- deleted class="d-block w-100" -->
+        <!-- pet details -->
+        <div style="outline:#101010 solid 5px; width: 400px; height: auto; padding-left: 10px; padding-right:10px; padding-bottom: 20px;">
+          <div class="mt-3">
+            <div style="padding-bottom: 20px;">
+              <h1><b>Description</b></h1>
+            </div>
+            <h4><b>Class:</b> {{pet.class}} </h4>
+            <h4><b>Breed:</b> {{pet.breed}} </h4>
+            <h4><b>Age:</b> {{pet.age}} </h4>
+            <h4><b>Location:</b> {{pet.location}} </h4>
+            <h4><b>Price:</b> ${{pet.price}} </h4>
+            <h4><b>Posted by:</b> {{user.username}} </h4>
+          </div>
+        </div>
       </div>
-
     </div>
+   
     <div class="mt-3 col-md-12">
       <button type="contact-button">Contact Owner</button>
-      <form method="POST" action="/addToCart">
-        <input type="hidden" name="petId" value="{{pet.id}}">
-        <button type="cart-button">Add to Cart</button>
-      </form>
-       <form method="POST" action="/addToWishlist" style="display: inline;">
-            <input type="hidden" name="petId" value="{{pet.id}}">
-            <button type="submit" class="star-button" title="Add to Wishlist">
-                <i class="fa fa-star"></i>
-            </button>
+      <button type="cart-button">Add to Cart</button>
+      <form method="POST" action="/addToWishlist" style="display: inline;">
+          <input type="hidden" name="petId" value="{{pet.id}}">
+          <button type="submit" class="star-button" title="Add to Wishlist">
+              <i class="fa fa-star"></i>
+          </button>
         </form>
     </div>
 

@@ -286,11 +286,14 @@ app.get('/pet', async (req, res) => {
 app.post('/view-pet', async (req, res) => {
     const { petId } = req.body; // Extract pet ID from the POST request body
     const query = 'SELECT * FROM pets WHERE id = $1 LIMIT 1;';
-    
-    try {
+    const temp = 'SELECT * FROM user_uploads WHERE pet_id = $1 LIMIT 1;'
+    const query2 = 'SELECT * FROM users WHERE id = $1 LIMIT 1;'
+    try {  
         const data = await db.oneOrNone(query, [petId]);
+        const userId = await db.oneOrNone(temp, [petId])
+        const user = await db.oneOrNone(query2, [userId.user_id]);
         if (data) {
-            res.render('pages/pet', { pet: data });
+            res.render('pages/pet', { pet: data, user: user });
         } else {
             res.status(404).send('Pet not found');
         }
