@@ -1,7 +1,6 @@
 // *****************************************************
 // <!-- Section 1 : Import Dependencies -->
 // *****************************************************
-
 const express = require('express'); // To build an application server or API
 const app = express();
 const handlebars = require('express-handlebars');
@@ -444,6 +443,66 @@ app.get('/wishlist', async (req, res) => {
 });
 
 
+
+
+app.post('/addToCart', async (req, res) => {
+    console.log('about to add to cart');
+    const userId = req.session.user?.id;
+    const { petId } = req.body; // Changed from petId to productId
+
+    if (!userId) {
+        return res.status(401).redirect('/login');
+    }
+
+    try {
+        // Check if the product is already in the cart
+        const existing = await db.oneOrNone(
+            'SELECT 1 FROM cart WHERE user_id = $1 AND pet_id = $2',
+            [userId, petId]
+        );
+
+        if (existing) {
+            return res.redirect(`/cart?message=This pet is already in your wishlist!!`);
+        }
+
+        // Add the product to the cart
+        const query = `
+            INSERT INTO cart (user_id, pet_id)
+            VALUES ($1, $2)
+        `;
+        await db.none(query, [userId, petId]);
+
+        res.redirect(`/cart?message=Pet successfully added to your wishlist!!`);
+    } catch (err) {
+        console.error('Error adding to cart:', err);
+        res.status(500).send('An error occurred while adding the product to your cart.');
+    }
+});
+
+
+
+app.get('/cart', async (req, res) => {
+    const userId = req.session.user?.id;
+
+    if (!userId) {
+        return res.status(401).redirect('/login'); // Redirect to login if not logged in
+    }
+
+    try {
+
+        // select all pets in that user's cart
+        const query = 'SELECT p.* FROM pets p JOIN cart c ON p.id = c.pet_id WHERE c.user_id = $1;';
+        const pets_in_cart = await db.any(query, [userId]);
+        const totalPrice = pets_in_cart.reduce((sum, pet) => sum + parseFloat(pet.price), 0);
+        const message = req.query.message;
+        // render the page with the pets in the cart
+        res.render('pages/cart', { pets: pets_in_cart, message: message, totalPrice });
+    } catch (error) {
+        console.error('Error retrieving cart information:', error);
+        res.status(500).send('Error retrieving cart information');
+    }
+});
+
 app.post('/removeFromCart', async (req, res) => {
     const userId = req.session.user?.id;
     const { petId } = req.body;
@@ -457,7 +516,7 @@ app.post('/removeFromCart', async (req, res) => {
         await db.none(query, [userId, petId]);
 
         console.log(`Removed pet ID ${petId} from cart for user ID ${userId}`);
-        res.redirect('/cart?message=removed');
+        res.redirect('/cart?message=Removed');
     } catch (err) {
         console.error('Error removing item from cart:', err);
         res.status(500).send('An error occurred while removing the item from your cart.');
@@ -521,65 +580,6 @@ app.post('/checkout', async (req, res) => {
     }
 });
 
-
-app.post('/addToCart', async (req, res) => {
-    console.log('about to add to cart');
-    const userId = req.session.user?.id;
-    const { petId } = req.body; // Changed from petId to productId
-
-    if (!userId) {
-        return res.status(401).redirect('/login');
-    }
-
-    try {
-        // Check if the product is already in the cart
-        const existing = await db.oneOrNone(
-            'SELECT 1 FROM cart WHERE user_id = $1 AND pet_id = $2',
-            [userId, petId]
-        );
-
-        if (existing) {
-            return res.redirect(`/cart?message=This pet is already in your wishlist!!`);
-        }
-
-        // Add the product to the cart
-        const query = `
-            INSERT INTO cart (user_id, pet_id)
-            VALUES ($1, $2)
-        `;
-        await db.none(query, [userId, petId]);
-
-        res.redirect(`/cart?message=Pet successfully added to your wishlist!!`);
-    } catch (err) {
-        console.error('Error adding to cart:', err);
-        res.status(500).send('An error occurred while adding the product to your cart.');
-    }
-});
-
-
-
-app.get('/cart', async (req, res) => {
-    const userId = req.session.user?.id;
-
-    if (!userId) {
-        return res.status(401).redirect('/login'); // Redirect to login if not logged in
-    }
-
-    try {
-        // Select all pets in the user's cart
-        const query = 'SELECT p.* FROM pets p JOIN cart c ON p.id = c.pet_id WHERE c.user_id = $1;';
-        const pets_in_cart = await db.any(query, [userId]);
-
-        // Calculate the total price
-        const totalPrice = pets_in_cart.reduce((sum, pet) => sum + parseFloat(pet.price), 0);
-
-        // Render the cart page with pets and total price
-        res.render('pages/cart', { pets: pets_in_cart, totalPrice });
-    } catch (error) {
-        console.error('Error retrieving cart information:', error);
-        res.status(500).send('Error retrieving cart information');
-    }
-});
 
 
 app.get('/profile', async (req, res) => {
