@@ -13,7 +13,7 @@
 
     button {
       background-color: #101010;
-      width: 300px;
+      width: 225px;
       border: none;
       color: white;
       text-align: center;
@@ -33,7 +33,7 @@
     }
   </style>
 </head>
-
+{{> message}}
 <h3 class="text-center">Your Cart</h2>
 
       <!-- pets in cart -->
@@ -43,11 +43,16 @@
         <div class="card-body">
           <h5 class="card-title">{{this.name}}</h5>
           <p class="card-text">{{this.price}}</p>
-          <a href="/pet/{{this.id}}" class="btn btn-secondary">See {{this.name}}'s info</a>
+          <form method="POST" action="/view-pet">
+            <input type="hidden" name="petId" value="{{this.id}}">
+            <button type="submit" class="btn btn-secondary">See {{this.name}}'s info</button>
+          </form>
         </div>
     </div>
 {{/each}}
 
 <div class="mt-3 col-md-12 center">
-          <button type="contact-button" class="center">Checkout</button>
+  <form method="POST" action="/checkout">
+    <button type="contact-button" class="center">Checkout</button>
+  </form>
 </div>
