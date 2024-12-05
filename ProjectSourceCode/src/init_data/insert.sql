@@ -49,6 +49,14 @@ insert into pets (name, class, breed, age, color, weight, birthday, eye_color, l
 insert into pets (name, class, breed, age, color, weight, birthday, eye_color, location, bio, price, image_url) values('Berry', 'bird', 'Java Sparrow', 1.8, 'White', 0.03, '2021-09-10', 'Red', '789 Aviary Road', 'active and chirpy companion', 40.00, '23.jpg');
 insert into pets (name, class, breed, age, color, weight, birthday, eye_color, location, bio, price, image_url) values('April', 'bird', 'Budgerigar/Budgie', 4.2, 'Green', 0.05, '2017-11-22', 'Blue', '321 Wing Circle', 'loves to mimic sounds', 60.00, '24.jpg');
 insert into pets (name, class, breed, age, color, weight, birthday, eye_color, location, bio, price, image_url) values('Kiwi', 'bird', 'Cockatiel', 2.7, 'Yellow', 0.09, '2020-01-30', 'Gray', '654 Nest Avenue', 'gentle and friendly nature', 75.00, '25.jpg');
+insert into pets (name, class, breed, age, color, weight, birthday, eye_color, location, bio, price, image_url) values ('Beryl', 'dog', 'Golden Retriever', 3.8, 'Golden', 70.5, '9/7/2002', 'Aquamarine', '53 Westridge Pass', 'Nothing', 71, '26.jpg');
+insert into pets (name, class, breed, age, color, weight, birthday, eye_color, location, bio, price, image_url) values ('Dale', 'dog', 'German Shepherd', 6.2, 'Black', 184.8, '10/31/2006', 'Goldenrod', '11 5th Circle', 'Nothing', 83, '27.jpg');
+insert into pets (name, class, breed, age, color, weight, birthday, eye_color, location, bio, price, image_url) values ('Vonny', 'dog', 'Siberian Husky', 11.9, 'White', 51.2, '3/28/2016', 'Aquamarine', '030 Bluejay Circle', 'Nothing', 27, '28.jpg');
+insert into pets (name, class, breed, age, color, weight, birthday, eye_color, location, bio, price, image_url) values ('Raoul', 'dog', 'German Shepherd', 10.4, 'Black', 132.3, '6/22/2017', 'Maroon', '69 Heath Place', 'Nothing', 53, '29.jpg');
+insert into pets (name, class, breed, age, color, weight, birthday, eye_color, location, bio, price, image_url) values ('Maxim', 'cat', 'American Shorthair', 3.8, 'Golden', 53.1, '4/15/2004', 'Teal', '19386 Clemons Parkway', 'Nothing', 99, '30.jpg');
+insert into pets (name, class, breed, age, color, weight, birthday, eye_color, location, bio, price, image_url) values ('Patrice', 'dog', 'Beagle', 5.3, 'White', 71.5, '4/6/2004', 'Mauv', '86097 Bartelt Junction', 'Nothing', 78, '31.jpg');
+insert into pets (name, class, breed, age, color, weight, birthday, eye_color, location, bio, price, image_url) values ('Jenica', 'cat', 'British Shorthair', 13.8, 'Black', 77.8, '7/2/2017', 'Violet', '52 Maple Wood Hill', 'Nothing', 96, '32.jpg');
+
 insert into user_uploads (user_id, pet_id) values (1, 1);
 insert into user_uploads (user_id, pet_id) values (2, 2);
 insert into user_uploads (user_id, pet_id) values (3, 3);
