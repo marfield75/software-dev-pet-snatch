@@ -1,42 +1,169 @@
-
-<div id="paybody">
+<body>
+    {{#if message}}
+        <div class="alert alert-danger">{{message}}</div>
+        {{/if}}
     <div class="payment-container">
-        <div class="left-section">
-            <h2>Payment Information</h2>
-            <div class="order-summary">
-                <h3>Order Summary</h3>
-                <p>Product Name: </p>
-                <p>Price: <strong></p>
-            </div>
-            <div class="support-info">
-                <p>Need help? <a href="#">Contact us</a></p>
-            </div>
-        </div>
-        <div class="right-section">
-            <form class="payment-form">
-                <label for="card-name">Cardholder Name</label>
-                <input type="text" id="card-name" placeholder="Name">
-                
-                <label for="card-number">Card Number</label>
-                <input type="text" id="card-number" placeholder="Card Number">
+        <!-- Display alert above the form -->
 
-                <label for="expiry-date">Expiration Date</label>
-                <input type="text" id="expiry-date" placeholder="MM/YY">
-                
-                <label for="cvv">CVV</label>
-                <input type="text" id="cvv" placeholder="CVV">
-
-                <button type="submit" class="pay-button">Pay Now</button>
-            </form>
-
-            <div class="payment-icons">
-                <img src="icon1.png" alt="Icon 1">
-                <img src="icon2.png" alt="Icon 2">
+        <div class="payment-content">
+            <!-- Add the image on the left -->
+            <div class="payment-image-container">
+                <img class="card-img-top"
+                    src="https://img.freepik.com/premium-photo/fun-dog-holding-padlock-its-hand_183364-59591.jpg"
+                    alt="Card image cap">
             </div>
-            <div class="security-badge">
-                <img src="security.png" alt="Security Badge">
-                <p>Secure Payment</p>
+
+            <!-- Payment form on the right -->
+            <div class="payment-form-container">
+                <h2>Complete Your Payment</h2>
+
+                {{#if cartItems.length}}
+                <ul class="cart-summary">
+                    {{#each cartItems}}
+                    <li>
+                        <strong>{{this.name}}</strong> - ${{this.price}}
+                    </li>
+                    {{/each}}
+                </ul>
+                {{/if}}
+
+                <form method="POST" action="/checkout">
+                    <div class="form-group">
+                        <label for="cardNumber">Card Number</label>
+                        <input type="text" id="cardNumber" name="cardNumber" class="form-control"
+                            placeholder="•••• •••• •••• ••••" maxlength="19" required>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group" style="flex: 1;">
+                            <label for="expiryDate">Expiry Date (MM/YY)</label>
+                            <input type="text" id="expiryDate" name="expiryDate" class="form-control"
+                                placeholder="MM/YY" maxlength="5" required>
+                        </div>
+                        <div class="form-group" style="flex: 1;">
+                            <label for="cvv">CVV</label>
+                            <input type="text" id="cvv" name="cvv" class="form-control" placeholder="•••" maxlength="3"
+                                required>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary mt-3">Pay Now</button>
+                </form>
             </div>
         </div>
     </div>
-</div>
+</body>
+
+
+<style>
+    body {
+        background-image: url('IMG_8894.jpg');
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-position: center;
+    }
+
+    .payment-container {
+        text-align: center;
+        margin: 50px auto;
+        padding: 30px;
+        border: 1px solid #d1d1d1;
+        border-radius: 15px;
+        width: 70%;
+        /* Increased width to accommodate both form and image */
+        background-color: #ffffff;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        display: flex;
+        /* Flexbox layout */
+        justify-content: space-between;
+        /* Space between image and form */
+        align-items: center;
+        /* Vertically align the content */
+    }
+
+    .payment-content {
+        display: flex;
+        /* Flexbox layout for image and form */
+        width: 100%;
+        gap: 20px;
+        /* Spacing between image and form */
+    }
+
+    .payment-image-container {
+        flex: 1;
+        /* Let the image container take up space on the left */
+    }
+
+    .payment-image {
+        width: 100%;
+        /* Ensure the image takes full width of its container */
+        max-width: 400px;
+        /* Set max width */
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .payment-form-container {
+        flex: 2;
+        /* Let the form container take up more space */
+        text-align: left;
+        /* Align text to the left */
+    }
+
+    .payment-form-container h2 {
+        font-family: 'Arial', sans-serif;
+        margin-bottom: 20px;
+    }
+
+    .cart-summary {
+        list-style-type: none;
+        padding: 0;
+        margin-bottom: 20px;
+    }
+
+    .cart-summary li {
+        font-size: 16px;
+        padding: 5px 0;
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-row {
+        display: flex;
+        gap: 20px;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 10px;
+        font-size: 14px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-primary {
+        padding: 10px 20px;
+        font-size: 16px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+    }
+
+    .alert {
+        margin-bottom: 20px;
+        padding: 10px;
+        border-radius: 5px;
+        color: #721c24;
+        background-color: #f8d7da;
+        border: 1px solid #f5c6cb;
+    }
+</style>

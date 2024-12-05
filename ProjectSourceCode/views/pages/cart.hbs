@@ -4,11 +4,16 @@
     integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
   <style>
     body {
-      background-image: url('IMG_8894.jpg'); /* 替换为你的背景图 URL */
-      background-size: cover; /* 让图片覆盖整个背景 */
-      background-repeat: no-repeat; /* 防止背景重复 */
-      background-attachment: fixed; /* 背景固定，不随滚动条移动 */
-      background-position: center; /* 将背景图片居中显示 */
+      background-image: url('IMG_8894.jpg');
+      /* 替换为你的背景图 URL */
+      background-size: cover;
+      /* 让图片覆盖整个背景 */
+      background-repeat: no-repeat;
+      /* 防止背景重复 */
+      background-attachment: fixed;
+      /* 背景固定，不随滚动条移动 */
+      background-position: center;
+      /* 将背景图片居中显示 */
     }
 
     button {
@@ -34,20 +39,32 @@
   </style>
 </head>
 
-<h3 class="text-center">Your Cart</h2>
+<h3 class="text-center">Your Cart</h3>
 
-      <!-- pets in cart -->
+<!-- pets in cart -->
 {{#each pets}}
-    <div class="card center" style="width: 18rem;">
-      <img class="card-img-top" src="https://t4.ftcdn.net/jpg/01/99/00/79/360_F_199007925_NolyRdRrdYqUAGdVZV38P4WX8pYfBaRP.jpg" alt="Card image cap">
-        <div class="card-body">
-          <h5 class="card-title">{{this.name}}</h5>
-          <p class="card-text">{{this.price}}</p>
-          <a href="/pet/{{this.id}}" class="btn btn-secondary">See {{this.name}}'s info</a>
-        </div>
+<div class="card center" style="width: 18rem;">
+  <img class="card-img-top" src="{{this.image_url}}" alt="Card image cap">
+  <div class="card-body">
+    <h5 class="card-title">{{this.name}}</h5>
+    <p class="card-text">${{this.price}}</p>
+    <div class="d-flex flex-column align-items-center">
+      <form method="POST" action="/view-pet" class="mb-2 w-100">
+        <input type="hidden" name="petId" value="{{this.id}}">
+        <button type="submit" class="btn btn-primary w-100">See info</button>
+      </form>
+      <form method="POST" action="/removeFromCart" class="w-100">
+        <input type="hidden" name="petId" value="{{this.id}}">
+        <button type="submit" class="btn btn-danger w-100">Remove</button>
+      </form>
     </div>
+  </div>
+</div>
 {{/each}}
 
 <div class="mt-3 col-md-12 center">
-          <button type="contact-button" class="center">Checkout</button>
+    <h4>Total: ${{totalPrice}}</h4>
+    <form method="GET" action="/payment">
+        <button type="submit" class="btn btn-success">Checkout</button>
+    </form>
 </div>

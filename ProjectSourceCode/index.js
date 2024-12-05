@@ -88,6 +88,7 @@ app.use(
     })
 );
 
+
 // Middleware to make user data available in all views
 app.use((req, res, next) => {
     res.locals.user = req.session.user || null;
@@ -118,30 +119,28 @@ app.get('/register2', (req, res) => {
     res.render('pages/register2');
 });
 
-app.get('/payment', (req, res) => {
-    res.render('pages/payment');
-});
-
 
 
 app.get('/home', async (req, res) => {
-    var message = "";
+    // Retrieve the message from the query parameters, if present
+    const message = req.query.message || (LoggedIn === 0 ? "Successfully Logged Out" : "");
+
+    // Reset the LoggedIn flag if necessary
     if (LoggedIn === 0) {
-        message = "Successfully Logged Out";
         LoggedIn = 1;
     }
-    const query = 'SELECT * FROM pets;';
-    db.any(query)
-        .then(data => {
-            // still figuring out how to use each to display all cards
-            res.render('pages/home', { pet: data, message: message });
-        })
-        .catch(err => {
-            console.log(err);
-            res.redirect('/home');
-        });
-});
 
+    try {
+        const query = 'SELECT * FROM pets;';
+        const pets = await db.any(query);
+
+        // Render the home page with pets and the message
+        res.render('pages/home', { pet: pets, message });
+    } catch (err) {
+        console.error('Error fetching pets for home page:', err);
+        res.redirect('/home');
+    }
+});
 
 
 // POST route for handling registration form submission
@@ -355,6 +354,34 @@ const auth = (req, res, next) => {
 // Authentication Required
 app.use(auth);
 
+app.get('/payment', async (req, res) => {
+    const userId = req.session.user?.id;
+
+    if (!userId) {
+        return res.status(401).redirect('/login');
+    }
+
+    try {
+        const query = `
+            SELECT p.*
+            FROM pets p
+            JOIN cart c ON p.id = c.pet_id
+            WHERE c.user_id = $1;
+        `;
+        const cartItems = await db.any(query, [userId]);
+
+        if (cartItems.length === 0) {
+            return res.redirect('/cart?message=empty');
+        }
+
+        res.render('pages/payment', { cartItems });
+    } catch (err) {
+        console.error('Error during payment rendering:', err);
+        res.status(500).send('An error occurred while processing the payment.');
+    }
+});
+
+
 app.post('/addToWishlist', async (req, res) => {
     console.log('about to add to wishlist')
     const userId = req.session.user?.id;
@@ -417,6 +444,82 @@ app.get('/wishlist', async (req, res) => {
 });
 
 
+app.post('/removeFromCart', async (req, res) => {
+    const userId = req.session.user?.id;
+    const { petId } = req.body;
+
+    if (!userId) {
+        return res.status(401).redirect('/login');
+    }
+
+    try {
+        const query = `DELETE FROM cart WHERE user_id = $1 AND pet_id = $2;`;
+        await db.none(query, [userId, petId]);
+
+        console.log(`Removed pet ID ${petId} from cart for user ID ${userId}`);
+        res.redirect('/cart?message=removed');
+    } catch (err) {
+        console.error('Error removing item from cart:', err);
+        res.status(500).send('An error occurred while removing the item from your cart.');
+    }
+});
+
+app.post('/checkout', async (req, res) => {
+    const userId = req.session.user?.id;
+    const { cardNumber, expiryDate, cvv } = req.body;
+
+    if (!userId) {
+        return res.status(401).redirect('/login'); // Redirect to login if not logged in
+    }
+
+    try {
+        // Validate card details
+        const cardNumberRegex = /^\d{16}$/; // 16-digit card number
+        const expiryDateRegex = /^(0[1-9]|1[0-2])\/\d{2}$/; // MM/YY format
+        const cvvRegex = /^\d{3}$/; // 3-digit CVV
+
+        if (
+            !cardNumberRegex.test(cardNumber) ||
+            !expiryDateRegex.test(expiryDate) ||
+            !cvvRegex.test(cvv)
+        ) {
+            return res.render('pages/payment', {
+                message: 'Invalid card details. Please check and try again.',
+                cartItems: [],
+            });
+        }
+
+        // Fetch all items in the user's cart
+        const query = `
+            SELECT p.*
+            FROM pets p
+            JOIN cart c ON p.id = c.pet_id
+            WHERE c.user_id = $1;
+        `;
+        const cartItems = await db.any(query, [userId]);
+
+        if (cartItems.length === 0) {
+            return res.redirect('/cart?message=empty');
+        }
+
+        // Remove pets from the `pets` table
+        const petIds = cartItems.map((pet) => pet.id);
+        const deletePetsQuery = `DELETE FROM pets WHERE id = ANY($1::int[]);`;
+        await db.none(deletePetsQuery, [petIds]);
+
+        // Clear the user's cart
+        const deleteCartQuery = `DELETE FROM cart WHERE user_id = $1;`;
+        await db.none(deleteCartQuery, [userId]);
+
+        console.log(`User ${userId} successfully checked out and removed pets:`, petIds);
+
+        // Redirect to the home page with a success message
+        res.redirect('/home?message=Payment successful! You will receive an email with more information');
+    } catch (err) {
+        console.error('Error during checkout:', err);
+        res.status(500).send('An error occurred while processing the checkout.');
+    }
+});
 
 
 app.post('/addToCart', async (req, res) => {
@@ -457,21 +560,26 @@ app.post('/addToCart', async (req, res) => {
 
 app.get('/cart', async (req, res) => {
     const userId = req.session.user?.id;
+
+    if (!userId) {
+        return res.status(401).redirect('/login'); // Redirect to login if not logged in
+    }
+
     try {
-
-        // select all pets in that user's cart
+        // Select all pets in the user's cart
         const query = 'SELECT p.* FROM pets p JOIN cart c ON p.id = c.pet_id WHERE c.user_id = $1;';
-        pets_in_cart = await db.any(query, [userId]);
+        const pets_in_cart = await db.any(query, [userId]);
 
-        // render the page with the pets in the cart
-        res.render('pages/cart', { pets: pets_in_cart });
+        // Calculate the total price
+        const totalPrice = pets_in_cart.reduce((sum, pet) => sum + parseFloat(pet.price), 0);
+
+        // Render the cart page with pets and total price
+        res.render('pages/cart', { pets: pets_in_cart, totalPrice });
     } catch (error) {
         console.error('Error retrieving cart information:', error);
         res.status(500).send('Error retrieving cart information');
     }
 });
-
-
 
 
 app.get('/profile', async (req, res) => {
