@@ -372,7 +372,7 @@ app.post('/addToWishlist', async (req, res) => {
         );
 
         if (existing) {
-            return res.redirect(`/wishlist?message=duplicate`);
+            return res.redirect(`/wishlist?message=This pet is already in your wishlist!!`);
         }
 
         // Add the pet to the wishlist
@@ -382,7 +382,7 @@ app.post('/addToWishlist', async (req, res) => {
         `;
         await db.none(query, [userId, petId]);
 
-        res.redirect(`/wishlist?message=added`);
+        res.redirect(`/wishlist?message=Pet successfully added to your wishlist!!`);
     } catch (err) {
         console.error('Error adding to wishlist:', err);
         res.status(500).send('An error occurred while adding the pet to your wishlist.');
@@ -407,9 +407,9 @@ app.get('/wishlist', async (req, res) => {
 
         const wishlistItems = await db.any(query, [userId]);
         console.log(wishlistItems)
-
+        const message = req.query.message;
         // Render the wishlist page with the retrieved pets
-        res.render('pages/wishlist', { pets: wishlistItems });
+        res.render('pages/wishlist', { pets: wishlistItems, message: message });
     } catch (err) {
         console.error('Error fetching wishlist:', err);
         res.status(500).send('An error occurred while retrieving your wishlist.');
@@ -436,7 +436,7 @@ app.post('/addToCart', async (req, res) => {
         );
 
         if (existing) {
-            return res.redirect(`/cart?message=duplicate`);
+            return res.redirect(`/cart?message=This pet is already in your wishlist!!`);
         }
 
         // Add the product to the cart
@@ -446,7 +446,7 @@ app.post('/addToCart', async (req, res) => {
         `;
         await db.none(query, [userId, petId]);
 
-        res.redirect(`/cart?message=added`);
+        res.redirect(`/cart?message=Pet successfully added to your wishlist!!`);
     } catch (err) {
         console.error('Error adding to cart:', err);
         res.status(500).send('An error occurred while adding the product to your cart.');
@@ -462,9 +462,9 @@ app.get('/cart', async (req, res) => {
         // select all pets in that user's cart
         const query = 'SELECT p.* FROM pets p JOIN cart c ON p.id = c.pet_id WHERE c.user_id = $1;';
         pets_in_cart = await db.any(query, [userId]);
-
+        const message = req.query.message;
         // render the page with the pets in the cart
-        res.render('pages/cart', { pets: pets_in_cart });
+        res.render('pages/cart', { pets: pets_in_cart, message: message });
     } catch (error) {
         console.error('Error retrieving cart information:', error);
         res.status(500).send('Error retrieving cart information');
@@ -673,7 +673,7 @@ app.post('/checkout', async (req, res) => {
         const query = `
             SELECT p.*
             FROM pets p
-            JOIN cart c ON p.id = c.product_id
+            JOIN cart c ON p.id = c.pet_id
             WHERE c.user_id = $1;
         `;
         const cartItems = await db.any(query, [userId]);

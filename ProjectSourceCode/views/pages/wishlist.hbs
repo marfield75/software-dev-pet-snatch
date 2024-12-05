@@ -1,17 +1,20 @@
 <div id="pets-container">
     <!-- Display feedback message -->
-    {{#if message}}
+    {{!-- {{#if message}}
     <div class="alert {{#ifEquals message "duplicate"}}alert-warning{{else}}alert-success{{/ifEquals}}">
         {{#ifEquals message "duplicate"}}
             This pet is already in your wishlist!
-        {{else ifEquals message "added"}}
+        {{#elseifEquals message "added"}}
             Pet added to your wishlist successfully!
         {{/ifEquals}}
     </div>
-    {{/if}}
+    {{/if}} --}}
+
+    {{> message}}
 
     <!-- Wishlist Content -->
     {{#if pets.length}}
+    <h3 class="text-center">Your Wishlist</h2>
     <div id="homebody"> <!-- Align with the structure of home.hbs -->
         {{#each pets}}
         <div class="card">
