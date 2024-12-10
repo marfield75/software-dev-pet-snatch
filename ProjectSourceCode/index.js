@@ -14,6 +14,15 @@ const axios = require('axios'); // To make HTTP requests from our server. We'll 
 const multer = require('multer');
 const fs = require('fs');
 
+// Import dotenv
+const dotenv = require('dotenv');
+
+// Load environment variables based on NODE_ENV
+const envFile = process.env.ENV_FILE || '.env'; // Defaults to `.env` if ENV_FILE is not set
+dotenv.config({ path: envFile });
+
+console.log('Loaded ${envFile} environment variables');
+console.log('Connecting to database at ${process.env.POSTGRES_HOST}');
 var LoggedIn = 1;
 
 // *****************************************************
@@ -29,7 +38,7 @@ const hbs = handlebars.create({
 
 // database configuration
 const dbConfig = {
-    host: 'dpg-ct8lblu8ii6s73ccb30g-a', // the database server
+    host: process.env.POSTGRES_HOST, // the database server
     port: 5432, // the database port
     database: process.env.POSTGRES_DB, // the database name
     user: process.env.POSTGRES_USER, // the user account to connect with
